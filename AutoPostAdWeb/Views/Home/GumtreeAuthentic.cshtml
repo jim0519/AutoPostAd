@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Get Authentic Cookie";
+}
+<h2>@ViewBag.Title.</h2>
+
+
+@if(TempData["Result"]!=null)
+{ 
+    <div style="font-size: xx-large;color: green;border: green solid 2px;">
+        @TempData["Result"].ToString()
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <h4>Use a local account to log in.</h4>
+                <hr />
+                <div class="form-group">
+                    <span class="col-md-2 control-label">User Name:</span>
+                    <div class="col-md-10">
+                        <input type="text" id="txtUserName" name="userName" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-md-2 control-label">Password:</span>
+                    <div class="col-md-10">
+                        <input type="password" id="txtPassword" name="password" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Get Cookie" class="btn btn-default" />
+                    </div>
+                </div>
+                @* Enable this once you have account confirmation enabled for password reset functionality
+                    <p>
+                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                    </p>*@
+            }
+        </section>
+    </div>
+</div>

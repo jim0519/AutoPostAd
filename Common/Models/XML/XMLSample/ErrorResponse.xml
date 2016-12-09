@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ErrorResponse>
+  <APICallName>Item_GetItem</APICallName>
+  <APIVersion>1</APIVersion>
+  <OnDate>10/01/2012 1:16:12 PM</OnDate>
+  <ErrorCode>3106</ErrorCode>
+  <ErrorMsg>Item not found</ErrorMsg>
+</ErrorResponse>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<GetCategoryResponse>
+	<TimeStamp>datetime</TimeStamp>
+	<Version>integer</Version>
+	<CategoryArray>
+		<Category>
+			<CategoryNum>integer</CategoryNum>
+			<CategoryLevel>integer</CategoryLevel>
+			<CategoryName>string</CategoryName>
+			<CategoryParentNum>integer</CategoryParentNum>
+			<LeafCategory>boolean</LeafCategory>
+			<IsClassifiedCat>boolean</IsClassifiedCat>
+		</Category>
+		<Category>
+			<CategoryNum>integer</CategoryNum>
+			<CategoryLevel>integer</CategoryLevel>
+			<CategoryName>string</CategoryName>
+			<CategoryParentNum>integer</CategoryParentNum>
+			<LeafCategory>boolean</LeafCategory>
+			<IsClassifiedCat>boolean</IsClassifiedCat>
+		</Category>
+		<Category>
+			<CategoryNum>integer</CategoryNum>
+			<CategoryLevel>integer</CategoryLevel>
+			<CategoryName>string</CategoryName>
+			<CategoryParentNum>integer</CategoryParentNum>
+			<LeafCategory>boolean</LeafCategory>
+			<IsClassifiedCat>boolean</IsClassifiedCat>
+		</Category>
+		<!--more Category nodes-->
+	</CategoryArray>
+</GetCategoryResponse>

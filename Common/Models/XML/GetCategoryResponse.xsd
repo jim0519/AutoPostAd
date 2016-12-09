@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="GetCategoryResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TimeStamp" type="xs:string" />
+				<xs:element name="Version" type="xs:string" />
+				<xs:element name="CategoryArray">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" name="Category">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CategoryNum" type="xs:string" />
+										<xs:element name="CategoryLevel" type="xs:string" />
+										<xs:element name="CategoryName" type="xs:string" />
+										<xs:element name="CategoryParentNum" type="xs:string" />
+										<xs:element name="LeafCategory" type="xs:string" />
+										<xs:element name="IsClassifiedCat" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

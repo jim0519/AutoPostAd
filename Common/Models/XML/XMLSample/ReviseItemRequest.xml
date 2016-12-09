@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ReviseItemRequest>
+  <Item>
+    <SellerID>string</SellerID>
+    <SellerPwd>string</SellerPwd>
+    <ListingID>integer</ListingID>
+    <Title>string</Title>
+    <Subtitle>string</Subtitle>
+    <Category>integer</Category>
+    <ISBN10>string</ISBN10>
+    <ISBN13>string</ISBN13>
+    <vShopCategory>integer</vShopCategory>
+    <OptionalReference1></OptionalReference1>
+    <OptionalReference2></OptionalReference2>
+    <Tags>
+      <AttrSet AttrSetName="string" AttrSetID="integer">
+        <Attr1 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr1>
+        <Attr2 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr2>
+        <Attr3 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr3>
+        <Attr4 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr4>
+        <Attr5 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr5>
+        <Attr6 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr6>
+        <Attr7 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr7>
+        <Attr8 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr8>
+        <Attr9 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr9>
+        <Attr10 AttrName="string" AttrID="integer">
+          <SelectedValue ValueName="string" ValueID="integer" OtherValue="string"></SelectedValue>
+        </Attr10>
+      </AttrSet>
+    </Tags>
+    <Duration>integer</Duration>
+    <StartPrice>decimal</StartPrice>
+    <BidIncrement>decimal</BidIncrement>
+    <BuyNowPrice>decimal</BuyNowPrice>
+    <ListAsClassifiedAd>integer</ListAsClassifiedAd>
+    <Quantity>integer</Quantity>
+    <BrandNew>integer</BrandNew>
+    <PromotionalFeatures>
+      <HighlightListing>integer</HighlightListing>
+      <Frontpage>integer</Frontpage>
+      <CategorySpecial>integer</CategorySpecial>
+      <Bold>integer</Bold>
+      <BidNow>integer</BidNow>
+      <Auto1Minute>integer</Auto1Minute>
+    </PromotionalFeatures>
+    <AutoRelistFeatures>
+      <AutoRelistType>integer</AutoRelistType>
+    </AutoRelistFeatures>
+    <PaymentMethods>
+      <BankCheque>integer</BankCheque>
+      <BankDeposit>integer</BankDeposit>
+      <Cash>integer</Cash>
+      <COD></COD>
+      <CreditCard>integer</CreditCard>
+      <Escrow>integer</Escrow>
+      <MoneyOrder>integer</MoneyOrder>
+      <Paymate>integer</Paymate>
+      <PayPal>integer</PayPal>
+      <PersonalCheque>integer</PersonalCheque>
+      <Other>integer</Other>
+      <ProvideBankDetailsToBuyer>integer</ProvideBankDetailsToBuyer>
+    </PaymentMethods>
+    <PaymentInst>string</PaymentInst>
+    <Postage>
+      <Type>integer</Type>
+      <FixedPostage>decimal</FixedPostage>
+      <FixedPostageByLocation>
+        <NSW>decimal</NSW>
+        <VIC>decimal</VIC>
+        <QLD>decimal</QLD>
+        <ACT>decimal</ACT>
+        <NT>decimal</NT>
+        <TAS>decimal</TAS>
+        <SA>decimal</SA>
+        <WA>decimal</WA>
+      </FixedPostageByLocation>
+      <CalculatedPostage>
+        <Dimensions>
+          <Length>integer</Length>
+          <Width>integer</Width>
+          <Height>integer</Height>
+          <Weight>integer</Weight>
+        </Dimensions>
+        <OfferAPRegular>integer</OfferAPRegular>
+        <OfferAPExpress>integer</OfferAPExpress>
+      </CalculatedPostage>
+      <Temando>
+        <PkgType>string</PkgType>
+        <Weight>integer</Weight>
+        <Length>integer</Length>
+        <Width>integer</Width>
+        <Height>integer</Height>
+      </Temando>
+    </Postage>
+    <ProvideReturnRefundPolicy>integer</ProvideReturnRefundPolicy>
+    <PostToLocation>
+      <Worldwide>integer</Worldwide>
+      <National>integer</National>
+      <Statewide>integer</Statewide>
+      <LocalPickup>integer</LocalPickup>
+    </PostToLocation>
+    <PostInst>string</PostInst>
+    <Description>string</Description>
+    <Pic1>string</Pic1>
+    <Pic2>string</Pic2>
+    <Pic3>string</Pic3>
+  </Item>
+  <DeleteField>string</DeleteField>
+  <!--more DeleteField nodes-->
+  <EndItem>integer</EndItem>
+  <RelistItem>integer</RelistItem>
+</ReviseItemRequest>

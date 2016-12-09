@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ErrorResponse" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ErrorResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="APICallName" type="xs:string" />
+        <xs:element name="APIVersion" type="xs:string" />
+        <xs:element name="OnDate" type="xs:string" />
+        <xs:element name="ErrorCode" type="xs:string" />
+        <xs:element name="ErrorMsg" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

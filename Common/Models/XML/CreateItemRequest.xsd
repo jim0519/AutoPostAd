@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="CreateItemRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Item">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SellerID" type="xs:string" />
+							<xs:element name="SellerPwd" type="xs:string" />
+							<xs:element name="Title" type="xs:string" />
+							<xs:element name="Subtitle" type="xs:string" />
+							<xs:element name="Category" type="xs:string" />
+							<xs:element name="ISBN10" type="xs:string" />
+							<xs:element name="ISBN13" type="xs:string" />
+							<xs:element name="eBayCategory" type="xs:string" />
+							<xs:element name="vShopCategory" type="xs:string" />
+							<xs:element name="OptionalReference1" />
+							<xs:element name="OptionalReference2" />
+							<xs:element name="Tags">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="AttrSet">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Attr1">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr2">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr3">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr4">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr5">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr6">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr7">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr8">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr9">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Attr10">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SelectedValue">
+																	<xs:complexType>
+																		<xs:attribute name="ValueName" type="xs:string" use="required" />
+																		<xs:attribute name="ValueID" type="xs:string" use="required" />
+																		<xs:attribute name="OtherValue" type="xs:string" use="required" />
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="AttrName" type="xs:string" use="required" />
+															<xs:attribute name="AttrID" type="xs:string" use="required" />
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="AttrSetName" type="xs:string" use="required" />
+												<xs:attribute name="AttrSetID" type="xs:string" use="required" />
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="StartTime" type="xs:string" />
+							<xs:element name="Duration" type="xs:string" />
+							<xs:element name="StartPrice" type="xs:string" />
+							<xs:element name="BidIncrement" type="xs:string" />
+							<xs:element name="BuyNowPrice" type="xs:string" />
+							<xs:element name="ListAsClassifiedAd" type="xs:string" />
+							<xs:element name="Quantity" type="xs:string" />
+							<xs:element name="BrandNew" type="xs:string" />
+							<xs:element name="PromotionalFeatures">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="HighlightListing" type="xs:string" />
+										<xs:element name="Frontpage" type="xs:string" />
+										<xs:element name="CategorySpecial" type="xs:string" />
+										<xs:element name="Bold" type="xs:string" />
+										<xs:element name="BidNow" type="xs:string" />
+										<xs:element name="Auto1Minute" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AutoRelistFeatures">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="AutoRelistType" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Suburb" type="xs:string" />
+							<xs:element name="State" type="xs:string" />
+							<xs:element name="Postcode" type="xs:string" />
+							<xs:element name="PaymentMethods">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="BankCheque" type="xs:string" />
+										<xs:element name="BankDeposit" type="xs:string" />
+										<xs:element name="Cash" type="xs:string" />
+										<xs:element name="COD" type="xs:string" />
+										<xs:element name="CreditCard" type="xs:string" />
+										<xs:element name="Escrow" type="xs:string" />
+										<xs:element name="MoneyOrder" type="xs:string" />
+										<xs:element name="Paymate" type="xs:string" />
+										<xs:element name="PayPal" type="xs:string" />
+										<xs:element name="PersonalCheque" type="xs:string" />
+										<xs:element name="Other" type="xs:string" />
+										<xs:element name="ProvideBankDetailsToBuyer" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PaymentInst" type="xs:string" />
+							<xs:element name="Postage">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Type" type="xs:string" />
+										<xs:element name="FixedPostage" type="xs:string" />
+										<xs:element name="FixedPostageByLocation">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="NSW" type="xs:string" />
+													<xs:element name="VIC" type="xs:string" />
+													<xs:element name="QLD" type="xs:string" />
+													<xs:element name="ACT" type="xs:string" />
+													<xs:element name="NT" type="xs:string" />
+													<xs:element name="TAS" type="xs:string" />
+													<xs:element name="SA" type="xs:string" />
+													<xs:element name="WA" type="xs:string" />
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="CalculatedPostage">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Dimensions">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Length" type="xs:string" />
+																<xs:element name="Width" type="xs:string" />
+																<xs:element name="Height" type="xs:string" />
+																<xs:element name="Weight" type="xs:string" />
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="OfferAPRegular" type="xs:string" />
+													<xs:element name="OfferAPExpress" type="xs:string" />
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Temando">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="PkgType" type="xs:string" />
+													<xs:element name="Weight" type="xs:string" />
+													<xs:element name="Length" type="xs:string" />
+													<xs:element name="Width" type="xs:string" />
+													<xs:element name="Height" type="xs:string" />
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="ProvideReturnRefundPolicy" type="xs:string" />
+							<xs:element name="PostToLocation">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Worldwide" type="xs:string" />
+										<xs:element name="National" type="xs:string" />
+										<xs:element name="Statewide" type="xs:string" />
+										<xs:element name="LocalPickup" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PostInst" type="xs:string" />
+							<xs:element name="Description" type="xs:string" />
+							<xs:element name="Pic1" type="xs:string" />
+							<xs:element name="Pic2" type="xs:string" />
+							<xs:element name="Pic3" type="xs:string" />
+							<xs:element name="Pic4" type="xs:string" />
+							<xs:element name="Pic5" type="xs:string" />
+							<xs:element name="Pic6" type="xs:string" />
+							<xs:element name="Pic7" type="xs:string" />
+							<xs:element name="Pic8" type="xs:string" />
+							<xs:element name="Pic9" type="xs:string" />
+							<xs:element name="Pic10" type="xs:string" />
+							<xs:element name="Pic11" type="xs:string" />
+							<xs:element name="GTIN" type="xs:string" />
+							<xs:element name="MPN" type="xs:string" />
+							<xs:element name="Brand" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

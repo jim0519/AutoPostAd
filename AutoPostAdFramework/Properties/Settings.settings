@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AutoPostAdBusiness.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AutoPostAdBusiness_DropshipSOAP_MagentoService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://www.dropshipzone.com.au/index.php/api/v2_soap/index/</Value>
+    </Setting>
+    <Setting Name="AutoPostAdBusiness_au_com_batteryexpert_MagentoService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://batteryexpert.com.au/index.php/api/v2_soap/index/</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

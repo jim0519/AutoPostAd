@@ -1,0 +1,149 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AutoPostAdBusiness.BusinessModels
+{
+    public class MagentoCSVBM
+    {
+        public string sku { get; set; }
+        public string _store { get; set; }
+        public string _attribute_set { get; set; }
+        public string _type { get; set; }
+        public string _category { get; set; }
+        public string _root_category { get; set; }
+        public string _product_websites { get; set; }
+        public string activation_information { get; set; }
+        public string color { get; set; }
+        public string computer_manufacturers { get; set; }
+        public string contrast_ratio { get; set; }
+        public string cost { get; set; }
+        public string country_of_manufacture { get; set; }
+        public string country_orgin { get; set; }
+        public string cpu_speed { get; set; }
+        public string created_at { get; set; }
+        public string custom_design { get; set; }
+        public string custom_design_from { get; set; }
+        public string custom_design_to { get; set; }
+        public string custom_layout_update { get; set; }
+        public string description { get; set; }
+        public string dimension { get; set; }
+        public string enable_googlecheckout { get; set; }
+        public string finish { get; set; }
+        public string gallery { get; set; }
+        public string gender { get; set; }
+        public string gift_message_available { get; set; }
+        public string harddrive_speed { get; set; }
+        public string hardrive { get; set; }
+        public string has_options { get; set; }
+        public string image { get; set; }
+        public string image_label { get; set; }
+        public string in_depth { get; set; }
+        public string manufacturer { get; set; }
+        public string max_resolution { get; set; }
+        public string media_gallery { get; set; }
+        public string megapixels { get; set; }
+        public string memory { get; set; }
+        public string meta_description { get; set; }
+        public string meta_keyword { get; set; }
+        public string meta_title { get; set; }
+        public string minimal_price { get; set; }
+        public string model { get; set; }
+        public string msrp { get; set; }
+        public string msrp_display_actual_price_type { get; set; }
+        public string msrp_enabled { get; set; }
+        public string name { get; set; }
+        public string news_from_date { get; set; }
+        public string news_to_date { get; set; }
+        public string options_container { get; set; }
+        public string page_layout { get; set; }
+        public string price { get; set; }
+        public string processor { get; set; }
+        public string ram_size { get; set; }
+        public string required_options { get; set; }
+        public string response_time { get; set; }
+        public string room { get; set; }
+        public string screensize { get; set; }
+        public string shape { get; set; }
+        public string shirt_size { get; set; }
+        public string shoe_size { get; set; }
+        public string shoe_type { get; set; }
+        public string short_description { get; set; }
+        public string small_image { get; set; }
+        public string small_image_label { get; set; }
+        public string special_from_date { get; set; }
+        public string special_price { get; set; }
+        public string special_to_date { get; set; }
+        public string status { get; set; }
+        public string tax_class_id { get; set; }
+        public string thumbnail { get; set; }
+        public string thumbnail_label { get; set; }
+        public string updated_at { get; set; }
+        public string url_key { get; set; }
+        public string url_path { get; set; }
+        public string visibility { get; set; }
+        public string weight { get; set; }
+        public string qty { get; set; }
+        public string min_qty { get; set; }
+        public string use_config_min_qty { get; set; }
+        public string is_qty_decimal { get; set; }
+        public string backorders { get; set; }
+        public string use_config_backorders { get; set; }
+        public string min_sale_qty { get; set; }
+        public string use_config_min_sale_qty { get; set; }
+        public string max_sale_qty { get; set; }
+        public string use_config_max_sale_qty { get; set; }
+        public string is_in_stock { get; set; }
+        public string notify_stock_qty { get; set; }
+        public string use_config_notify_stock_qty { get; set; }
+        public string manage_stock { get; set; }
+        public string use_config_manage_stock { get; set; }
+        public string stock_status_changed_auto { get; set; }
+        public string use_config_qty_increments { get; set; }
+        public string qty_increments { get; set; }
+        public string use_config_enable_qty_inc { get; set; }
+        public string enable_qty_increments { get; set; }
+        public string _links_related_sku { get; set; }
+        public string _links_related_position { get; set; }
+        public string _links_crosssell_sku { get; set; }
+        public string _links_crosssell_position { get; set; }
+        public string _links_upsell_sku { get; set; }
+        public string _links_upsell_position { get; set; }
+        public string _associated_sku { get; set; }
+        public string _associated_default_qty { get; set; }
+        public string _associated_position { get; set; }
+        public string _tier_price_website { get; set; }
+        public string _tier_price_customer_group { get; set; }
+        public string _tier_price_qty { get; set; }
+        public string _tier_price_price { get; set; }
+        public string _group_price_website { get; set; }
+        public string _group_price_customer_group { get; set; }
+        public string _group_price_price { get; set; }
+        public string _media_attribute_id { get; set; }
+        public string _media_image { get; set; }
+        public string _media_lable { get; set; }
+        public string _media_position { get; set; }
+        public string _media_is_disabled { get; set; }
+        public string _custom_option_store { get; set; }
+        public string _custom_option_type { get; set; }
+        public string _custom_option_title { get; set; }
+        public string _custom_option_is_required { get; set; }
+        public string _custom_option_price { get; set; }
+        public string _custom_option_sku { get; set; }
+        public string _custom_option_max_characters { get; set; }
+        public string _custom_option_sort_order { get; set; }
+        public string _custom_option_row_title { get; set; }
+        public string _custom_option_row_price { get; set; }
+        public string _custom_option_row_sku { get; set; }
+        public string _custom_option_row_sort { get; set; }
+        public string _super_products_sku { get; set; }
+        public string _super_attribute_code { get; set; }
+        public string _super_attribute_option { get; set; }
+        public string _super_attribute_price_corr { get; set; }
+        public string postage { get; set; }
+        
+
+    }
+}

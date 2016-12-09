@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CreateItemResponse>
+	<TimeStamp>datetime</TimeStamp>
+	<ReferenceID>integer</ReferenceID>
+	<ListingID>integer</ListingID>
+	<Message>string</Message>
+</CreateItemResponse>
