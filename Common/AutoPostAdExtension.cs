@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
 using System.IO;
+using HtmlAgilityPack;
 
 
 namespace Common
@@ -64,6 +65,64 @@ namespace Common
         public static string ToIntString(this bool Value)
         {
             return Convert.ToInt32(Value).ToString();
+        }
+
+        private static IEnumerable<HtmlNode> GetNodesByPredicate(this HtmlNode node, Func<HtmlNode, bool> predicate)
+        {
+            var allNodes = node.DescendantsAndSelf();
+            var returnNodes = allNodes.Where(predicate);
+            //if (returnNodes.Count() > 0)
+            //    return returnNodes;
+            //else
+            //    return null;
+
+            return returnNodes ?? null;
+        }
+
+        private static string GetInfoByPredicate(this HtmlNode node, Func<HtmlNode, bool> predicate)
+        {
+            if (node != null)
+            {
+                var targetNode = node.GetNodesByPredicate(predicate).FirstOrDefault();
+                if (targetNode != null)
+                {
+                    return targetNode.InnerText;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public static int GetTotalPage(this HtmlNode node)
+        {
+            var pageNumberNodes= node.GetNodesByPredicate(n =>
+                n.Attributes.Contains("class") && n.Attributes["class"].Value.Contains("paginator__page-num"));
+
+            if (pageNumberNodes != null && pageNumberNodes.Count() > 0)
+            {
+                return pageNumberNodes.Select(n => int.Parse(n.InnerText)).Max();
+            }
+            else
+            {
+                return 1;
+            }
+            
+        }
+
+        public static IEnumerable<HtmlNode> GetAdNodes(this HtmlNode node)
+        {
+            return node.GetNodesByPredicate(n =>
+                n.Name.ToLower().Equals("a")
+                && n.Attributes.Contains("class")
+                && n.Attributes["class"].Value.Contains("rs-ad-title")
+                && n.Attributes.Contains("href"));
+
         }
     }
 }

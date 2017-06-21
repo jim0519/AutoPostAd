@@ -139,8 +139,9 @@ namespace AutoPostAdBusiness.Handlers
                     AutoPostAdDataID = returnData.ID, 
                     PostDate = DateTime.Now, 
                     AdID = returnData.ReturnAdID });
-                DataSource.SynchronizeData(returnData.ID);
-                _autoPostAdPostDataService.UpdateAutoPostAdPostData(DataSource.OrginalDataSource.FirstOrDefault(o=>o.ID==returnData.ID));
+                //DataSource.SynchronizeData(returnData.ID);
+                //_autoPostAdPostDataService.UpdateAutoPostAdPostData(DataSource.OrginalDataSource.FirstOrDefault(o=>o.ID==returnData.OriginalData.ID));
+                _autoPostAdPostDataService.UpdateAutoPostAdPostData(returnData.OriginalData);
                 //insert the result in ad result
                 
             }
@@ -152,7 +153,9 @@ namespace AutoPostAdBusiness.Handlers
         {
             try
             {
-                var selectedRecord = DataSource.Where(x => x.Selected).Where(x => !string.IsNullOrEmpty(x.LastReturnAdID));
+                //FixAdID(DataSource);
+                //var selectedRecord = DataSource.Where(x => x.Selected).Where(x => !string.IsNullOrEmpty(x.LastReturnAdID));
+                var selectedRecord = DataSource.Where(x => x.Selected);
                 _website.DeleteAd(selectedRecord.ToList());
             }
             catch (Exception ex)
@@ -160,6 +163,12 @@ namespace AutoPostAdBusiness.Handlers
                 throw ex;
             }
         }
+
+        //private void FixAdID(AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM> DataSource)
+        //{
+        //    var selectedRecord = DataSource.Where(x => x.Selected);
+        //    _website.lo
+        //}
 
         private void _website_DeleteAdComplete(object sender, BusinessObjectEventArgs<AutoPostAdPostDataBM> e)
         {

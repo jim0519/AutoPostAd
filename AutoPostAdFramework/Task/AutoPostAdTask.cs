@@ -88,7 +88,7 @@ namespace AutoPostAdBusiness.Task
             ScheduleRuleLine returnRuleLine = null; 
             var elaspDays=(nowTime.Date-rule.LastSuccessTime.Date).TotalDays;
             //see if nowTime is meet the interval day+LastSuccessTime
-            if (elaspDays % rule.IntervalDay == 0)
+            if ((elaspDays % rule.IntervalDay == 0)&&((elaspDays>0&&rule.IntervalDay>=1)||elaspDays==0&&rule.IntervalDay==1))
             {
                 var nowTimeTime = nowTime.TimeOfDay;
                 //get the rule line whose time range the nowTime can sit in

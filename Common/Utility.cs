@@ -315,6 +315,7 @@ namespace Common
                     PostAdID = exreturnAdID;
                 else
                     ErrorMessage = "Ad post failed.";
+                LogManager.Instance.Error(webex.Message + (!string.IsNullOrEmpty(PostAdID)?" with success Ad ID "+PostAdID:""));
                 return webex.Response;
             }
             catch (Exception ex)
@@ -353,8 +354,72 @@ namespace Common
                 this.Headers.Add("Referer", referURL);
             ////this.Headers.Add("Connection", "Close");
             this.Encoding = System.Text.Encoding.UTF8;
+            //var returnHtml="";
+            //int retryTime = 0;
+            //while (string.IsNullOrEmpty(returnHtml) && retryTime < 10)
+            //{
+            //    try
+            //    {
+            //        returnHtml = DownloadString(url);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        if (retryTime == 9)
+            //            throw ex;
+            //    }
+            //    retryTime++;
+            //}
+            var returnHtml = DownloadString(url);
+            return returnHtml;
+        }
+    }
 
-            var returnHtml= DownloadString(url);
+    public class MyAdPageClient : GumtreeWebClient
+    {
+
+        public MyAdPageClient(CookieContainer cookies)
+            : this(cookies, AutoPostAdConfig.Instance.UserAgent)
+        {
+
+        }
+
+        public MyAdPageClient(CookieContainer cookies, string userAgent)
+            : base(cookies, userAgent)
+        {
+
+        }
+
+        public string GetMyAdPage(string url)
+        {
+            this.Headers.Add("Cache-Control", "no-cache");
+            this.Headers.Add("Pragma", "no-cache");
+            this.Headers.Add("Upgrade-Insecure-Requests", "1");
+            this.Headers.Add("Accept-Language", "en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh-TW;q=0.2");
+            this.Headers.Add("Accept-Language", "en-AU");
+            this.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+            //this.Headers.Add("Accept-Encoding", "gzip, deflate, sdch, br");///!!!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!! Do not add this in the header because it will cause encode problem
+            this.Headers.Add("User-Agent", UserAgent);
+            this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            //if (!string.IsNullOrEmpty(referURL))
+            //    this.Headers.Add("Referer", referURL);
+            ////this.Headers.Add("Connection", "Close");
+            this.Encoding = System.Text.Encoding.UTF8;
+            //var returnHtml="";
+            //int retryTime = 0;
+            //while (string.IsNullOrEmpty(returnHtml) && retryTime < 10)
+            //{
+            //    try
+            //    {
+            //        returnHtml = DownloadString(url);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        if (retryTime == 9)
+            //            throw ex;
+            //    }
+            //    retryTime++;
+            //}
+            var returnHtml = DownloadString(url);
             return returnHtml;
         }
     }

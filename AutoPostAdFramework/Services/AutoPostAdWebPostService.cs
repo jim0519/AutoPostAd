@@ -12,6 +12,7 @@ using AutoPostAdBusiness.BusinessModels;
 using AutoPostAdBusiness.MapperInfrastruture;
 using Common.DeathByCaptcha;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace AutoPostAdBusiness.Services
 {
@@ -36,7 +37,7 @@ namespace AutoPostAdBusiness.Services
         //private readonly IRepository<AutoPostAdHeader> _autoPostAdHeaderRepository;
         //private readonly IRepository<AutoPostAdLine> _autoPostAdLineRepository;
         private readonly IRepository<Account> _accountRepository;
-        private readonly IRepository<AutoPostAdPostData> _autoPostAdPostDataRepository;
+        //private readonly IRepository<AutoPostAdPostData> _autoPostAdPostDataRepository;
         private readonly IAutoPostAdResultService _autoPostAdResultService;
         private readonly AuthenticCookieFetcher _cookieFetcher;
         private readonly AutoResetEvent _resultEvent;
@@ -50,12 +51,12 @@ namespace AutoPostAdBusiness.Services
             IAutoPostAdResultService autoPostAdResultService,
             Client captchaClient, 
             IDelayable delayController)
-            : base(captchaClient, delayController)
+            : base(captchaClient, delayController, autoPostAdPostDataRepository)
         {
             _resultEvent = new AutoResetEvent(false);
             _cookieFetcher = new AuthenticCookieFetcher(_resultEvent);
             _accountRepository = accountRepository;
-            _autoPostAdPostDataRepository = autoPostAdPostDataRepository;
+            //_autoPostAdPostDataRepository = autoPostAdPostDataRepository;
             _autoPostAdResultService = autoPostAdResultService;
         }
 
@@ -142,13 +143,13 @@ namespace AutoPostAdBusiness.Services
         public bool PostActiveAdOnWeb()
         {
             //get active ads
-            var activeAds = new AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM>(_autoPostAdPostDataRepository.Table.Where(ad => ad.Status == Status.Active).ToList());
+            var activeAds = new AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM>(AutoPostAdPostDataRepository.Table.Where(ad => ad.Status == Status.Active).ToList());
             return this.PostAd(activeAds);
         }
 
         public bool DeleteExistingAd()
         {
-            var existingAd =  new AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM>(_autoPostAdPostDataRepository.Table.Where(ad=>ad.AutoPostAdResults.Any()&&ad.Status==Status.Active).ToList());
+            var existingAd = new AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM>(AutoPostAdPostDataRepository.Table.Where(ad => ad.AutoPostAdResults.Any() && ad.Status == Status.Active).ToList());
             return this.DeleteAd(existingAd);
         }
 
@@ -249,14 +250,14 @@ namespace AutoPostAdBusiness.Services
                                 if (!string.IsNullOrEmpty(ad.ReturnAdID))
                                 {
                                     //var originAd = (postAdDatas as AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM>).OrginalDataSource.FirstOrDefault(o => o.ID == ad.ID);
-                                    var originAd = _autoPostAdPostDataRepository.GetById(ad.ID);
+                                    var originAd = AutoPostAdPostDataRepository.GetById(ad.ID);
                                     originAd.AutoPostAdResults.Add(new AutoPostAdResult()
                                     {
                                         AutoPostAdDataID = ad.ID,
                                         PostDate = DateTime.Now,
                                         AdID = ad.ReturnAdID
                                     });
-                                    _autoPostAdPostDataRepository.Update(originAd);
+                                    AutoPostAdPostDataRepository.Update(originAd);
                                 }
 
                                 LogManager.Instance.Info("Ad ID:" + ad.ID + " return post ad ID is:" + (string.IsNullOrEmpty(ad.ReturnAdID) ? string.Empty : ad.ReturnAdID));
@@ -294,7 +295,8 @@ namespace AutoPostAdBusiness.Services
             DelayController.DelaySecondRange = new int[2] { 1, 2 };
             try
             {
-                
+                FixAdID(postAdDatas);
+
                 int recordCount = postAdDatas.Count();
                 int i = 1;
                 int percentage = i;
@@ -316,6 +318,10 @@ namespace AutoPostAdBusiness.Services
                         //}
                         SubmitDeleteRequest(ad);
                         _autoPostAdResultService.DeleteAutoPostAdResult(ad.LastReturnAdResult);
+                        if (ad.LastReturnAdResult != null)
+                        {
+                            ad.AutoPostAdResults.Clear();
+                        }
                         DelayController.EndProcess();
                     }
                     catch (Exception ex)
@@ -350,7 +356,8 @@ namespace AutoPostAdBusiness.Services
             }
 
             int retryCaptchaTime = 0;
-            while (string.IsNullOrEmpty(verificationCode) && retryCaptchaTime < 3)
+            //int maliciousRead = 0;
+            while (string.IsNullOrEmpty(verificationCode) && retryCaptchaTime < 10)
             {
                 try
                 {
@@ -366,13 +373,25 @@ namespace AutoPostAdBusiness.Services
                         }
                         if (captchaObj.Solved)
                         {
-                            verificationCode = captchaObj.Text;
+                            if (!Regex.IsMatch(captchaObj.Text, @"^[0-9]{4}$"))
+                            {
+                                //captchaFailTime++;
+                                CaptchaClient.Report(captchaObj);
+                                //maliciousRead++;
+                                //if (retryCaptchaTime >= 4)
+                                //    verificationCode = "0000";
+                                //continue;
+                            }
+                            else
+                            {
+                                verificationCode = captchaObj.Text;
+                            }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-
+                    //throw new Exception(ex.Message);
                 }
                 retryCaptchaTime++;
             }
@@ -383,7 +402,7 @@ namespace AutoPostAdBusiness.Services
 
         #endregion
 
-
+        
         
     }
 }

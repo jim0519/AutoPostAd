@@ -28,10 +28,12 @@ namespace AutoPostAdBusiness.Handlers
         private string _verificationCode;
         private string _verificationToken;
         private IDelayable _delayController;
-        public GumtreeWebsite(Client captchaClient, IDelayable delayController)
+        private readonly IRepository<AutoPostAdPostData> _autoPostAdPostDataRepository;
+        public GumtreeWebsite(Client captchaClient, IDelayable delayController, IRepository<AutoPostAdPostData> autoPostAdPostDataRepository)
         {
             _captchaClient = captchaClient;
             _delayController = delayController;
+            _autoPostAdPostDataRepository = autoPostAdPostDataRepository;
         }
 
         public AutoPostAdController Manager
@@ -230,29 +232,45 @@ namespace AutoPostAdBusiness.Handlers
 
 
                                         int retryCaptchaTime = 0;
-                                        while (string.IsNullOrEmpty(_verificationCode) && retryCaptchaTime < 3)
+                                        while (string.IsNullOrEmpty(_verificationCode) && retryCaptchaTime < 10)
                                         {
                                             try
                                             {
-                                                Captcha captchaObj = _captchaClient.Upload(imgByte);
-                                                if (null != captchaObj)
-                                                {
-                                                    int getCaptchaTime = 0;
-                                                    while (captchaObj.Uploaded && !captchaObj.Solved && getCaptchaTime<40)
+                                                //var captchaFailTime = 0;
+                                                //while (captchaFailTime < 5 && string.IsNullOrEmpty(_verificationCode))
+                                                //{
+                                                    Captcha captchaObj = _captchaClient.Upload(imgByte);
+                                                    if (null != captchaObj)
                                                     {
-                                                        Thread.Sleep(Client.PollsInterval * 1000);
-                                                        captchaObj = _captchaClient.GetCaptcha(captchaObj.Id);
-                                                        getCaptchaTime++;
+                                                        int getCaptchaTime = 0;
+                                                        while (captchaObj.Uploaded && !captchaObj.Solved && getCaptchaTime < 40)
+                                                        {
+                                                            Thread.Sleep(Client.PollsInterval * 1000);
+                                                            captchaObj = _captchaClient.GetCaptcha(captchaObj.Id);
+                                                            getCaptchaTime++;
+                                                        }
+                                                        if (captchaObj.Solved)
+                                                        {
+                                                            if (!Regex.IsMatch(captchaObj.Text, @"^[0-9]{4}$"))
+                                                            {
+                                                                //captchaFailTime++;
+                                                                _captchaClient.Report(captchaObj);
+                                                                //if (retryCaptchaTime >= 4)
+                                                                //    _verificationCode = "0000";
+                                                                //continue;
+                                                            }
+                                                            else
+                                                            {
+                                                                _verificationCode = captchaObj.Text;
+                                                            }
+                                                        }
                                                     }
-                                                    if (captchaObj.Solved)
-                                                    {
-                                                        _verificationCode = captchaObj.Text;
-                                                    }
-                                                }
+                                                //}
                                             }
                                             catch (Exception ex)
                                             {
                                                 var exMessage = ex.Message;
+                                                //throw new Exception(exMessage);
                                             }
                                             retryCaptchaTime++;
                                         }
@@ -374,6 +392,8 @@ namespace AutoPostAdBusiness.Handlers
         { 
             try
             {
+                FixAdID(postAdDatas);
+
                 Thread t = new Thread(new ThreadStart(() =>
                     {
                         ProgressInfoService.BeginProgressProcess();
@@ -422,6 +442,87 @@ namespace AutoPostAdBusiness.Handlers
                 t.IsBackground = true;
                 t.Start();
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        protected void FixAdID(IEnumerable<AutoPostAdPostDataBM> postAdDatas)
+        {
+            try
+            {
+                if (!postAdDatas.FirstOrDefault().AccountObj.LastName.Contains("FixAdID"))
+                    return;
+                //LogManager.Instance.Info("FixAdID Passed");
+                //foreach(var ad in postAdDatas)
+                //    LogManager.Instance.Info(ad.ID+" last return ad id: "+ad.LastReturnAdID);
+                if(postAdDatas.All(d=>!string.IsNullOrEmpty(d.LastReturnAdID)))
+                {
+                    return;
+                }
+                _delayController.DelaySecondRange = new int[2] { 1, 2 };
+                int pageNumber = 1;
+                int totalPage;
+                var onlineAds = new List<MyAdPageAd>();
+                do
+                {
+                    _delayController.StarProcess();
+                    var htmlDoc = LoadMyAdHtmlDoc(postAdDatas.FirstOrDefault(), pageNumber);
+                    var pageRootNode = htmlDoc.DocumentNode;
+                    totalPage = pageRootNode.GetTotalPage();
+                    var adNodes = pageRootNode.GetAdNodes();
+                    foreach (var adNode in adNodes)
+                    {
+                        var adID = Regex.Match(adNode.Attributes["href"].Value, @"\d{10}").Value;
+                        var title = adNode.InnerText.Trim();
+                        onlineAds.Add(new MyAdPageAd() { AdID = adID, Title = title });
+                    }
+                    pageNumber++;
+                    _delayController.EndProcess();
+                }
+                while (pageNumber <= totalPage);
+
+                //////var adsWithoutID = postAdDatas.Where(x => string.IsNullOrEmpty(x.LastReturnAdID));
+                //foreach (var oa in onlineAds)
+                //    LogManager.Instance.Info("Online Ad ID: " + oa.AdID + " Title: " + oa.Title);
+                foreach (var ad in postAdDatas)
+                {
+                    //if (!string.IsNullOrEmpty(ad.LastReturnAdID))
+                    //    continue;
+                    var originAd = ad.OriginalData as AutoPostAdPostData;
+                    //LogManager.Instance.Info("oringinal Ad ID: " + ad.ID + " Title: " + ad.Title);
+                    var matchOnlineAd = onlineAds.Where(a => a.Title.Equals(HttpUtility.HtmlEncode(ad.Title.Trim()))).FirstOrDefault();
+                    //LogManager.Instance.Info((matchOnlineAd == null ? "matchOnlineAd not exist" : "matchOnlineAd exist"));
+                    if (matchOnlineAd == null)
+                        continue;
+
+                    if (string.IsNullOrEmpty(ad.LastReturnAdID))
+                    {
+                        originAd.AutoPostAdResults.Add(new AutoPostAdResult()
+                        {
+                            AutoPostAdDataID = originAd.ID,
+                            PostDate = DateTime.Now,
+                            AdID = matchOnlineAd.AdID
+                        });
+                        _autoPostAdPostDataRepository.Update(originAd);
+                        LogManager.Instance.Info("Ad ID Fixed for " + originAd.AutoPostAdResults.FirstOrDefault().AutoPostAdDataID + " with " + originAd.AutoPostAdResults.FirstOrDefault().AdID);
+                    }
+                    else
+                    { 
+                        var postAdResult=originAd.AutoPostAdResults.FirstOrDefault();
+                        if (!postAdResult.AdID.Equals(matchOnlineAd.AdID))
+                        {
+                            postAdResult.AdID = matchOnlineAd.AdID;
+                            _autoPostAdPostDataRepository.Update(originAd);
+                            LogManager.Instance.Info("Ad ID Fixed for " + originAd.AutoPostAdResults.FirstOrDefault().AutoPostAdDataID + " with " + originAd.AutoPostAdResults.FirstOrDefault().AdID);
+                        }
+                    
+                    }
+
+                    
+                }
             }
             catch (Exception ex)
             {
@@ -521,11 +622,40 @@ namespace AutoPostAdBusiness.Handlers
             var htmlDoc = new HtmlAgilityPack.HtmlDocument();
             CookieContainer cookieGumtreePage = new CookieContainer();
             cookieGumtreePage.SetCookies(new Uri(adFormURL), cookieContainerString);
-            using (var gpWebClient = new GetGumtreePageClient(cookieGumtreePage, postAdData.AccountObj.UserAgent))
+            int retryTime = 0;
+            var strHtml = "";
+            while (string.IsNullOrEmpty(strHtml) && retryTime < 10)
             {
-                var strHtml = gpWebClient.GetGumtreePage(adFormURL, GumtreeURL.SelectCategory);
-                htmlDoc.LoadHtml(strHtml);
+                try
+                {
+                    using (var gpWebClient = new GetGumtreePageClient(cookieGumtreePage, postAdData.AccountObj.UserAgent))
+                    {
+                        strHtml = gpWebClient.GetGumtreePage(adFormURL, GumtreeURL.SelectCategory);
+                        htmlDoc.LoadHtml(strHtml);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (retryTime >= 9)
+                        throw ex;
+                }
+                retryTime++;
+            }
+            return htmlDoc;
+        }
 
+        protected HtmlAgilityPack.HtmlDocument LoadMyAdHtmlDoc(AutoPostAdPostDataBM postAdData,int pageNum)
+        {
+            var cookieContainerString = postAdData.Cookie.Replace(";", ",");
+            var myAdURL = string.Format(GumtreeURL.MyAd, pageNum, "50");
+            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+            CookieContainer cookieGumtreePage = new CookieContainer();
+            cookieGumtreePage.SetCookies(new Uri(myAdURL), cookieContainerString);
+
+            using (var myAdWebClient = new MyAdPageClient(cookieGumtreePage, postAdData.AccountObj.UserAgent))
+            {
+                var strHtml = myAdWebClient.GetMyAdPage(myAdURL);
+                htmlDoc.LoadHtml(strHtml);
             }
             return htmlDoc;
         }
@@ -918,6 +1048,11 @@ namespace AutoPostAdBusiness.Handlers
                     return true;
             }
         }
+
+        protected IRepository<AutoPostAdPostData> AutoPostAdPostDataRepository
+        {
+            get { return _autoPostAdPostDataRepository; }
+        }
     }
 
     #region Related Class
@@ -1019,4 +1154,6 @@ namespace AutoPostAdBusiness.Handlers
     }
 
     #endregion
+
+
 }

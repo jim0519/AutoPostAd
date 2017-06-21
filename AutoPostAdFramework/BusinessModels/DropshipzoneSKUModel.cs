@@ -36,7 +36,36 @@ namespace AutoPostAdBusiness.BusinessModels
         public string Width { get; set; }
         [CsvColumn(Name = "Carton Height (cm)")]
         public string Height { get; set; }
-        [CsvColumn(Name = "images")]
-        public string Images { get; set; }
+        [CsvColumn(Name = "Image 1")]
+        public string Image1 { get; set; }
+        [CsvColumn(Name = "Image 2")]
+        public string Image2 { get; set; }
+        [CsvColumn(Name = "Image 3")]
+        public string Image3 { get; set; }
+        [CsvColumn(Name = "Image 4")]
+        public string Image4 { get; set; }
+        [CsvColumn(Name = "Image 5")]
+        public string Image5 { get; set; }
+        [CsvColumn(Name = "Image 6")]
+        public string Image6 { get; set; }
+        [CsvColumn(Name = "Image 7")]
+        public string Image7 { get; set; }
+        [CsvColumn(Name = "Image 8")]
+        public string Image8 { get; set; }
+        [CsvColumn(Name = "Image 9")]
+        public string Image9 { get; set; }
+        [CsvColumn(Name = "Image 10")]
+        public string Image10 { get; set; }
+        [CsvColumn(Name = "Image 11")]
+        public string Image11 { get; set; }
+        [CsvColumn(Name = "Image 12")]
+        public string Image12 { get; set; }
+        [CsvColumn(Name = "Image 13")]
+        public string Image13 { get; set; }
+        [CsvColumn(Name = "Image 14")]
+        public string Image14 { get; set; }
+        [CsvColumn(Name = "Image 15")]
+        public string Image15 { get; set; }
+
     }
 }

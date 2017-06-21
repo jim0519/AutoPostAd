@@ -14,7 +14,7 @@ namespace AutoPostAdBusiness.MapperInfrastruture
     {
         private IList<TOriginal> _originalDataSource;
         public AutoPostAdDataSource(IList<TOriginal> orginalDataSource)
-            : base(orginalDataSource.Select(x => Mapper.Map<TOriginal, TBusiness>(x)))
+            : base(orginalDataSource.Select(x => (TBusiness)Activator.CreateInstance(typeof(TBusiness), new object[] { x })))
         {
             _originalDataSource = orginalDataSource;
         }

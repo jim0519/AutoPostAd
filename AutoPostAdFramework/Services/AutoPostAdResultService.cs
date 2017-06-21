@@ -48,5 +48,18 @@ namespace AutoPostAdBusiness.Services
         }
 
         #endregion
+
+
+        //public void DeleteAutoPostAdResult(int resultID)
+        //{
+        //    //_autoPostAdResultRepository.Table.re
+        //    var result=_autoPostAdResultRepository.GetById(resultID);
+
+        //    if (result == null)
+        //        throw new ArgumentNullException("AutoPostAdResult");
+
+        //    _autoPostAdResultRepository.Delete(result);
+
+        //}
     }
 }

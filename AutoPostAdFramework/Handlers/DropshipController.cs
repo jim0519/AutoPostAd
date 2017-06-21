@@ -625,6 +625,55 @@ namespace AutoPostAdBusiness.Handlers
             }
         }
 
+        public void FixDropshipzoneCategoryCustomID()
+        {
+            //var sessionID = _magentoService.login("JimTestSOAPUser", "abc.123");
+            var sessionID = _magentoService.login("NewAim", "abc.123");
+            try
+            {
+                var paraFilters = new filters();
+                //paraFilters.filter = new associativeEntity[1];
+                var lstFilters = new List<associativeEntity>();
+                //lstFilters.Add(new associativeEntity() { key = "sku", value = "SCALE-BFAT-WH" });
+                paraFilters.filter = lstFilters.ToArray();
+
+                var activeProducts = _magentoService.catalogProductList(sessionID, paraFilters, string.Empty);
+
+                foreach (var product in activeProducts)
+                {
+                    AutoPostAdPostData ad = null;
+                    var existingAd = _autoPostAdPostDataService.GetAutoPostAdPostDataBySKUAdTypeID(product.sku, Common.ChannelType.DropshipZone);
+
+                    if (existingAd != null&&existingAd.Status=="1")
+                    {
+                        ad = existingAd;
+                        catalogProductRequestAttributes customAttributes = new catalogProductRequestAttributes();
+                        var productInfo = _magentoService.catalogProductInfo(sessionID, product.product_id, string.Empty, customAttributes, string.Empty);
+
+                        if (productInfo != null)
+                        {
+                            ad.CustomID = productInfo.product_id;
+                            if (productInfo.category_ids != null && productInfo.category_ids.Count() > 0)
+                                ad.BusinessLogoPath = productInfo.category_ids.Aggregate((current, next) => current + "," + next);
+                            else
+                                ad.BusinessLogoPath = string.Empty;
+                            _autoPostAdPostDataService.UpdateAutoPostAdPostData(ad);
+                        }
+                    }
+
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                LogManager.Instance.Error(ex.ToString());
+            }
+            finally 
+            {
+                _magentoService.endSession(sessionID);
+            }
+        }
+
 
         //update dropshipzone product info for nopcommerce, e.g businesslogo(categories), customid(dropshipzone productid)
         public void UpdateDropshipzoneInfoForNopcommerce()
@@ -809,7 +858,38 @@ namespace AutoPostAdBusiness.Handlers
                 }
 
                 var skuLine = skuList.FirstOrDefault(l=>l.SKU.ToUpper().Equals(sku.ToUpper()));
-                var imagesURL = skuLine.Images.Split(';');
+                //var imagesURL = skuLine.Images.Split(';');
+                var imagesURL = new List<string>();
+                if (!string.IsNullOrEmpty(skuLine.Image1))
+                    imagesURL.Add(skuLine.Image1);
+                if (!string.IsNullOrEmpty(skuLine.Image2))
+                    imagesURL.Add(skuLine.Image2);
+                if (!string.IsNullOrEmpty(skuLine.Image3))
+                    imagesURL.Add(skuLine.Image3);
+                if (!string.IsNullOrEmpty(skuLine.Image4))
+                    imagesURL.Add(skuLine.Image4);
+                if (!string.IsNullOrEmpty(skuLine.Image5))
+                    imagesURL.Add(skuLine.Image5);
+                if (!string.IsNullOrEmpty(skuLine.Image6))
+                    imagesURL.Add(skuLine.Image6);
+                if (!string.IsNullOrEmpty(skuLine.Image7))
+                    imagesURL.Add(skuLine.Image7);
+                if (!string.IsNullOrEmpty(skuLine.Image8))
+                    imagesURL.Add(skuLine.Image8);
+                if (!string.IsNullOrEmpty(skuLine.Image9))
+                    imagesURL.Add(skuLine.Image9);
+                if (!string.IsNullOrEmpty(skuLine.Image10))
+                    imagesURL.Add(skuLine.Image10);
+                if (!string.IsNullOrEmpty(skuLine.Image11))
+                    imagesURL.Add(skuLine.Image11);
+                if (!string.IsNullOrEmpty(skuLine.Image12))
+                    imagesURL.Add(skuLine.Image12);
+                if (!string.IsNullOrEmpty(skuLine.Image13))
+                    imagesURL.Add(skuLine.Image13);
+                if (!string.IsNullOrEmpty(skuLine.Image14))
+                    imagesURL.Add(skuLine.Image14);
+                if (!string.IsNullOrEmpty(skuLine.Image15))
+                    imagesURL.Add(skuLine.Image15);
                 DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + skuLine.SKU + "\\");
                 int i = 0;
                 if (!di.Exists)
@@ -1236,133 +1316,140 @@ namespace AutoPostAdBusiness.Handlers
 
                 foreach (var adData in adDatas)
                 {
-                    if (itemIndex == 1)
-                        csvRows = new List<NopcommerceCSVBM>();
-
-                    var csvRowData = new NopcommerceCSVBM();
-                    csvRowData.ProductTypeId = 5;
-                    csvRowData.ParentGroupedProductId = 0;
-                    csvRowData.VisibleIndividually = true.ToString().ToUpper();
-                    csvRowData.Name = adData.Title;
-                    csvRowData.FullDescription = adData.Description;
-                    csvRowData.VendorId = 0;
-                    csvRowData.ProductTemplateId = 1;
-                    csvRowData.ShowOnHomePage = false.ToString().ToUpper();
-                    csvRowData.AllowCustomerReviews = true.ToString().ToUpper();
-                    csvRowData.Published = true.ToString().ToUpper();
-                    csvRowData.SKU = adData.SKU;
-                    csvRowData.IsGiftCard = false.ToString().ToUpper();
-                    csvRowData.GiftCardTypeId = 0;
-                    csvRowData.RequireOtherProducts = false.ToString().ToUpper();
-                    csvRowData.AutomaticallyAddRequiredProducts = false.ToString().ToUpper();
-                    csvRowData.IsDownload = false.ToString().ToUpper();
-                    csvRowData.DownloadId = 0;
-                    csvRowData.UnlimitedDownloads = false.ToString().ToUpper();
-                    csvRowData.MaxNumberOfDownloads = 0;
-                    csvRowData.DownloadActivationTypeId = 0;
-                    csvRowData.HasSampleDownload = false.ToString().ToUpper();
-                    csvRowData.SampleDownloadId = 0;
-                    csvRowData.HasUserAgreement = false.ToString().ToUpper();
-                    csvRowData.IsRecurring = false.ToString().ToUpper();
-                    csvRowData.RecurringCycleLength = 0;
-                    csvRowData.RecurringCyclePeriodId = 0;
-                    csvRowData.RecurringTotalCycles = 0;
-                    csvRowData.IsRental = false.ToString().ToUpper();
-                    csvRowData.RentalPriceLength = 0;
-                    csvRowData.RentalPricePeriodId = 0;
-                    csvRowData.IsShipEnabled = true.ToString().ToUpper();
-                    csvRowData.IsFreeShipping = (adData.Notes == "FreeShipping" ? true.ToString().ToUpper() : false.ToString().ToUpper());
-                    csvRowData.ShipSeparately = false.ToString().ToUpper();
-                    csvRowData.AdditionalShippingCharge = adData.Postage;
-                    csvRowData.DeliveryDateId = 0;
-                    csvRowData.IsTaxExempt = false.ToString().ToUpper();
-                    csvRowData.TaxCategoryId = 0;
-                    csvRowData.IsTelecommunicationsOrBroadcastingOrElectronicServices = false.ToString().ToUpper();
-                    csvRowData.ManageInventoryMethodId = 1;
-                    csvRowData.UseMultipleWarehouses = false.ToString().ToUpper();
-                    csvRowData.WarehouseId = 0;
-                    csvRowData.StockQuantity = adData.InventoryQty;
-                    csvRowData.DisplayStockAvailability = true.ToString().ToUpper();
-                    csvRowData.DisplayStockQuantity = false.ToString().ToUpper();
-                    csvRowData.MinStockQuantity = 10;
-                    csvRowData.LowStockActivityId = 1;
-                    csvRowData.NotifyAdminForQuantityBelow = 10;
-                    csvRowData.BackorderModeId = 0;
-                    csvRowData.AllowBackInStockSubscriptions = false.ToString().ToUpper();
-                    csvRowData.OrderMinimumQuantity = 1;
-                    csvRowData.OrderMaximumQuantity = 10000;
-                    csvRowData.AllowAddingOnlyExistingAttributeCombinations = false.ToString().ToUpper();
-                    csvRowData.DisableBuyButton = false.ToString().ToUpper();
-                    csvRowData.DisableWishlistButton = false.ToString().ToUpper();
-                    csvRowData.AvailableForPreOrder = false.ToString().ToUpper();
-                    csvRowData.CallForPrice = false.ToString().ToUpper();
-                    csvRowData.Price = adData.Price.ToeBayCrazyMallPrice();
-                    csvRowData.OldPrice = 0;
-                    csvRowData.ProductCost = adData.Price;
-                    csvRowData.CustomerEntersPrice = false.ToString().ToUpper();
-                    csvRowData.MinimumCustomerEnteredPrice = 0;
-                    csvRowData.MaximumCustomerEnteredPrice = 0;
-                    csvRowData.Weight = 0;
-                    csvRowData.Length = 0;
-                    csvRowData.Width = 0;
-                    csvRowData.Height = 0;
-                    csvRowData.CreatedOnUtc = DateTime.Now.ToOADate();
-                    if(!string.IsNullOrEmpty( adData.BusinessLogoPath))
+                    try
                     {
-                        //var categoryIDs = _autoPostAdPostDataService.GetMatchedNopcommerceCategories(adData.BusinessLogoPath);
-                        var categoryIDs = nopCategories.Where(c => adData.BusinessLogoPath.Split(',').Contains(c.Description));
-                        csvRowData.CategoryIds = categoryIDs.Select(c => c.Id.ToString()).Aggregate((current, next) => current + ";" + next);
-                    }
-                    if (!string.IsNullOrEmpty(adData.ImagesPath))
-                    {
-                        DirectoryCopy(AutoPostAdConfig.Instance.ImageFilesPath + adData.SKU, Directory.GetCurrentDirectory() + "\\NopcommerceItemFile\\" + adData.SKU, false);
-                        
+                        if (itemIndex == 1)
+                            csvRows = new List<NopcommerceCSVBM>();
 
-                        int i = 1;
-                        foreach (var image in adData.ImagesPath.Split(';'))
-                        { 
-                            switch(i)
+                        var csvRowData = new NopcommerceCSVBM();
+                        csvRowData.ProductTypeId = 5;
+                        csvRowData.ParentGroupedProductId = 0;
+                        csvRowData.VisibleIndividually = true.ToString().ToUpper();
+                        csvRowData.Name = adData.Title;
+                        csvRowData.FullDescription = adData.Description;
+                        csvRowData.VendorId = 0;
+                        csvRowData.ProductTemplateId = 1;
+                        csvRowData.ShowOnHomePage = false.ToString().ToUpper();
+                        csvRowData.AllowCustomerReviews = true.ToString().ToUpper();
+                        csvRowData.Published = true.ToString().ToUpper();
+                        csvRowData.SKU = adData.SKU;
+                        csvRowData.IsGiftCard = false.ToString().ToUpper();
+                        csvRowData.GiftCardTypeId = 0;
+                        csvRowData.RequireOtherProducts = false.ToString().ToUpper();
+                        csvRowData.AutomaticallyAddRequiredProducts = false.ToString().ToUpper();
+                        csvRowData.IsDownload = false.ToString().ToUpper();
+                        csvRowData.DownloadId = 0;
+                        csvRowData.UnlimitedDownloads = false.ToString().ToUpper();
+                        csvRowData.MaxNumberOfDownloads = 0;
+                        csvRowData.DownloadActivationTypeId = 0;
+                        csvRowData.HasSampleDownload = false.ToString().ToUpper();
+                        csvRowData.SampleDownloadId = 0;
+                        csvRowData.HasUserAgreement = false.ToString().ToUpper();
+                        csvRowData.IsRecurring = false.ToString().ToUpper();
+                        csvRowData.RecurringCycleLength = 0;
+                        csvRowData.RecurringCyclePeriodId = 0;
+                        csvRowData.RecurringTotalCycles = 0;
+                        csvRowData.IsRental = false.ToString().ToUpper();
+                        csvRowData.RentalPriceLength = 0;
+                        csvRowData.RentalPricePeriodId = 0;
+                        csvRowData.IsShipEnabled = true.ToString().ToUpper();
+                        csvRowData.IsFreeShipping = (adData.Notes == "FreeShipping" ? true.ToString().ToUpper() : false.ToString().ToUpper());
+                        csvRowData.ShipSeparately = false.ToString().ToUpper();
+                        csvRowData.AdditionalShippingCharge = adData.Postage;
+                        csvRowData.DeliveryDateId = 0;
+                        csvRowData.IsTaxExempt = false.ToString().ToUpper();
+                        csvRowData.TaxCategoryId = 0;
+                        csvRowData.IsTelecommunicationsOrBroadcastingOrElectronicServices = false.ToString().ToUpper();
+                        csvRowData.ManageInventoryMethodId = 1;
+                        csvRowData.UseMultipleWarehouses = false.ToString().ToUpper();
+                        csvRowData.WarehouseId = 0;
+                        csvRowData.StockQuantity = adData.InventoryQty;
+                        csvRowData.DisplayStockAvailability = true.ToString().ToUpper();
+                        csvRowData.DisplayStockQuantity = false.ToString().ToUpper();
+                        csvRowData.MinStockQuantity = 10;
+                        csvRowData.LowStockActivityId = 1;
+                        csvRowData.NotifyAdminForQuantityBelow = 10;
+                        csvRowData.BackorderModeId = 0;
+                        csvRowData.AllowBackInStockSubscriptions = false.ToString().ToUpper();
+                        csvRowData.OrderMinimumQuantity = 1;
+                        csvRowData.OrderMaximumQuantity = 10000;
+                        csvRowData.AllowAddingOnlyExistingAttributeCombinations = false.ToString().ToUpper();
+                        csvRowData.DisableBuyButton = false.ToString().ToUpper();
+                        csvRowData.DisableWishlistButton = false.ToString().ToUpper();
+                        csvRowData.AvailableForPreOrder = false.ToString().ToUpper();
+                        csvRowData.CallForPrice = false.ToString().ToUpper();
+                        csvRowData.Price = adData.Price.ToeBayCrazyMallPrice();
+                        csvRowData.OldPrice = 0;
+                        csvRowData.ProductCost = adData.Price;
+                        csvRowData.CustomerEntersPrice = false.ToString().ToUpper();
+                        csvRowData.MinimumCustomerEnteredPrice = 0;
+                        csvRowData.MaximumCustomerEnteredPrice = 0;
+                        csvRowData.Weight = 0;
+                        csvRowData.Length = 0;
+                        csvRowData.Width = 0;
+                        csvRowData.Height = 0;
+                        csvRowData.CreatedOnUtc = DateTime.Now.ToOADate();
+                        if (!string.IsNullOrEmpty(adData.BusinessLogoPath))
+                        {
+                            //var categoryIDs = _autoPostAdPostDataService.GetMatchedNopcommerceCategories(adData.BusinessLogoPath);
+                            var categoryIDs = nopCategories.Where(c => adData.BusinessLogoPath.Split(',').Contains(c.Description));
+                            csvRowData.CategoryIds = categoryIDs.Select(c => c.Id.ToString()).Aggregate((current, next) => current + ";" + next);
+                        }
+                        if (!string.IsNullOrEmpty(adData.ImagesPath))
+                        {
+                            DirectoryCopy(AutoPostAdConfig.Instance.ImageFilesPath + adData.SKU, Directory.GetCurrentDirectory() + "\\NopcommerceItemFile\\" + adData.SKU, false);
+
+
+                            int i = 1;
+                            foreach (var image in adData.ImagesPath.Split(';'))
                             {
-                                case 1:
-                                    csvRowData.Picture1 = serverPath + image;
-                                    break;
-                                case 2:
-                                    csvRowData.Picture2 = serverPath + image;
-                                    break;
-                                case 3:
-                                    csvRowData.Picture3 = serverPath + image;
-                                    break;
-                                case 4:
-                                    csvRowData.Picture4 = serverPath + image;
-                                    break;
-                                case 5:
-                                    csvRowData.Picture5 = serverPath + image;
-                                    break;
-                                case 6:
-                                    csvRowData.Picture6 = serverPath + image;
-                                    break;
-                                case 7:
-                                    csvRowData.Picture7 = serverPath + image;
-                                    break;
-                                case 8:
-                                    csvRowData.Picture8 = serverPath + image;
-                                    break;
-                            }
-                            i++;
+                                switch (i)
+                                {
+                                    case 1:
+                                        csvRowData.Picture1 = serverPath + image;
+                                        break;
+                                    case 2:
+                                        csvRowData.Picture2 = serverPath + image;
+                                        break;
+                                    case 3:
+                                        csvRowData.Picture3 = serverPath + image;
+                                        break;
+                                    case 4:
+                                        csvRowData.Picture4 = serverPath + image;
+                                        break;
+                                    case 5:
+                                        csvRowData.Picture5 = serverPath + image;
+                                        break;
+                                    case 6:
+                                        csvRowData.Picture6 = serverPath + image;
+                                        break;
+                                    case 7:
+                                        csvRowData.Picture7 = serverPath + image;
+                                        break;
+                                    case 8:
+                                        csvRowData.Picture8 = serverPath + image;
+                                        break;
+                                }
+                                i++;
 
+                            }
+                        }
+
+                        csvRows.Add(csvRowData);
+
+                        //if (itemIndex < itemsPerFile &&  adDatas.Count != itemIndex)
+                        if (itemIndex < itemsPerFile && (fileNumber - 1) * itemsPerFile + itemIndex < adDatas.Count)
+                            itemIndex++;
+                        else
+                        {
+                            _csvContext.Write<NopcommerceCSVBM>(csvRows, "NopcommerceItemFile\\NopcommerceItem_" + fileDate + "_" + fileNumber.ToString() + ".csv", _csvFileDescription);
+                            fileNumber++;
+                            itemIndex = 1;
                         }
                     }
-
-                    csvRows.Add(csvRowData);
-
-                    //if (itemIndex < itemsPerFile &&  adDatas.Count != itemIndex)
-                    if (itemIndex < itemsPerFile && (fileNumber -1)* itemsPerFile+itemIndex<adDatas.Count)
-                        itemIndex++;
-                    else
+                    catch (Exception ex)
                     {
-                        _csvContext.Write<NopcommerceCSVBM>(csvRows, "NopcommerceItemFile\\NopcommerceItem_" + fileDate + "_" + fileNumber.ToString() + ".csv", _csvFileDescription);
-                        fileNumber++;
-                        itemIndex = 1;
+                        LogManager.Instance.Error(ex.ToString());
                     }
                 }
 
@@ -1476,7 +1563,8 @@ namespace AutoPostAdBusiness.Handlers
         {
             try
             {
-                var datas = _autoPostAdPostDataService.GetAutoPostAdPostDataByAdTypeID(ChannelType.DropshipZone);
+                //var datas = _autoPostAdPostDataService.GetAutoPostAdPostDataByAdTypeID(ChannelType.DropshipZone);
+                var datas = _autoPostAdPostDataService.GetCustomAutoPostAdPostData();
                 var dirLogoingImages="ForLogoingImages\\";
                 if (!Directory.Exists(dirLogoingImages))
                 {
@@ -1487,6 +1575,7 @@ namespace AutoPostAdBusiness.Handlers
                     if (!string.IsNullOrEmpty(data.ImagesPath) && data.ImagesPath.Split(';').Count() > 0)
                     {
                         var firstImageFile = data.ImagesPath.Split(';').FirstOrDefault();
+                        firstImageFile = firstImageFile.Substring(firstImageFile.IndexOf("\\" + data.SKU)+1, firstImageFile.Length - firstImageFile.IndexOf("\\" + data.SKU)-1);
                         Image img = Image.FromFile(AutoPostAdConfig.Instance.ImageFilesPath+firstImageFile);
                         //if (img.Width==500)
                         //{
@@ -1534,12 +1623,14 @@ namespace AutoPostAdBusiness.Handlers
                     return false;
                 }
                 var imageFiles = Directory.GetFiles(dirLogoedImages);
+                var copyToDirRoot = @"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\NopCommerce2\";
+                //var copyToDirRoot = AutoPostAdConfig.Instance.ImageFilesPath;
                 foreach (var imageFile in imageFiles)
                 {
                     var sku = GetOnlyFileNameByFullName(imageFile).Substring(0, GetOnlyFileNameByFullName(imageFile).IndexOf("_logo"));
                     if (Directory.Exists(AutoPostAdConfig.Instance.ImageFilesPath + sku))
                     {
-                        var exactDirPathName = GetExactPathName(AutoPostAdConfig.Instance.ImageFilesPath + sku);
+                        var exactDirPathName = GetExactPathName(copyToDirRoot + sku);
                         var exactSKUName = GetOnlyFileNameByFullName(exactDirPathName);
 
                         File.Copy(imageFile, exactDirPathName+"\\"+exactSKUName + "_logo.jpg", true);
@@ -1738,7 +1829,9 @@ namespace AutoPostAdBusiness.Handlers
                     { 
                         var updateItem = new ItemType();
                         updateItem.ItemID = data.CustomID;
-                        updateItem.Quantity = 0;// data.InventoryQty;
+                        updateItem.Quantity = data.InventoryQty;
+                        //var newDesc = data.Description.Replace("dealsplash", "ozcrazymall");
+                        //updateItem.Description = newDesc;
 
                         StringCollection deletedFields = new StringCollection();
                         _reviseFixedPriceItemCall.ReviseFixedPriceItem(updateItem, deletedFields);

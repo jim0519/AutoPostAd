@@ -15,5 +15,7 @@ namespace AutoPostAdBusiness.Services
         void UpdateAutoPostAdResult(AutoPostAdResult result);
 
         void DeleteAutoPostAdResult(AutoPostAdResult result);
+
+        //void DeleteAutoPostAdResult(int resultID);
     }
 }

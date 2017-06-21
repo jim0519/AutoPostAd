@@ -86,12 +86,19 @@ namespace AutoPostAdBusiness.Task
                                 var grpScheduleAdsDelete = pdg.Select(pd => pd);
                                 var grpScheduleAdsPost = grpScheduleAdsDelete.Where(pd=>!pd.Notes.ToUpper().Equals("DELONLY"));
                                 var grpScheduleAdsToBeUpdateDelete = grpScheduleAdsDelete.Where(pd => pd.Notes.ToUpper().Equals("DELONLY"));
+                                var grpScheduleAdsToBeClearNotes = grpScheduleAdsDelete.Where(pd => pd.Notes.ToUpper().Equals("UPDATE"));
                                 if (AutoPostAdWebPostService.DeleteAd(grpScheduleAdsDelete))
                                 {
                                     foreach(var d in grpScheduleAdsToBeUpdateDelete)
                                     {
                                         var originAd = AutoPostAdPostDataService.GetAutoPostAdPostDataByID(d.ID);
                                         originAd.Status = Status.Deleted;
+                                        AutoPostAdPostDataService.UpdateAutoPostAdPostData(originAd);
+                                    }
+                                    foreach (var d in grpScheduleAdsToBeClearNotes)
+                                    {
+                                        var originAd = AutoPostAdPostDataService.GetAutoPostAdPostDataByID(d.ID);
+                                        originAd.Notes = "";
                                         AutoPostAdPostDataService.UpdateAutoPostAdPostData(originAd);
                                     }
                                     if (!AutoPostAdWebPostService.PostAd(grpScheduleAdsPost))

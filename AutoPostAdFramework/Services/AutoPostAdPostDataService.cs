@@ -265,8 +265,12 @@ namespace AutoPostAdBusiness.Services
             if (scheduleRule.Name.Contains("RollOver"))
             {
                 var everyTimePostAds = query.Where(d => d.Notes.ToUpper().Equals("ALWAYS")).ToList();
+                var updatePostAds = query.Where(d => d.Notes.ToUpper().Equals("UPDATE")).ToList();
+                var delOnlyAds = query.Where(d => d.Notes.ToUpper().Equals("DELONLY")).ToList();
                 var remainingAds = ((everyTimePostAds==null)?query.ToList():query.Where(d => !everyTimePostAds.Contains(d)).ToList());
-                var remainingAdsCount = takeCount - ((everyTimePostAds==null)?0:everyTimePostAds.Count());
+                remainingAds = ((updatePostAds == null) ? remainingAds : remainingAds.Where(d => !updatePostAds.Contains(d)).ToList());
+                remainingAds = ((delOnlyAds == null) ? remainingAds : remainingAds.Where(d => !delOnlyAds.Contains(d)).ToList());
+                var remainingAdsCount = takeCount - ((everyTimePostAds == null) ? 0 : everyTimePostAds.Count()) - ((updatePostAds == null) ? 0 : updatePostAds.Count());
                 if (remainingAdsCount <= 0)
                     return everyTimePostAds;
 
@@ -281,8 +285,12 @@ namespace AutoPostAdBusiness.Services
                 {
                     remainingAds = remainingAds.Take(remainingAdsCount).ToList(); 
                 }
+                if (delOnlyAds != null)
+                    remainingAds.InsertRange(0, delOnlyAds);
                 if (everyTimePostAds!=null)
                     remainingAds.InsertRange(0,everyTimePostAds);
+                if (updatePostAds != null)
+                    remainingAds.InsertRange(0, updatePostAds);
                 return remainingAds;
             }
             return query;
