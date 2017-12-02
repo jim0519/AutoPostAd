@@ -1010,19 +1010,24 @@ namespace AutoPostAdBusiness.Handlers
                     if (!IsCookieValid(acc))//good to use
                     { 
                         //login
-                        using (var gpWebClient = new GetGumtreePageClient(new CookieContainer()))
-                        {
-                            gpWebClient.GetGumtreePage(GumtreeURL.LoginForm, GumtreeURL.HomePage);//cannot work, need to load all the cookie in Login Form
-                            var response = gpWebClient.Response;
-                            if (response.ResponseUri.AbsoluteUri.Contains(GumtreeURL.LoginForm))
-                                return false;
-                            else
-                                return true;
-                        }
+                        //using (var gpWebClient = new GetGumtreePageClient(new CookieContainer()))
+                        //{
+                        //    gpWebClient.GetGumtreePage(GumtreeURL.LoginForm, GumtreeURL.HomePage);//cannot work, need to load all the cookie in Login Form
+                        //    var response = gpWebClient.Response;
+                        //    if (response.ResponseUri.AbsoluteUri.Contains(GumtreeURL.LoginForm))
+                        //        return false;
+                        //    else
+                        //        return true;
+                        //}
                         using (var loginClient = new GumtreeLoginWebClient())
                         {
                             loginClient.Login(acc.UserName, acc.Password);
-                            var respoonse = loginClient.Response;
+                            //var response = loginClient.Response;
+                            var cookieContainer = loginClient.CookieContainer;
+                            foreach (var cookie in cookieContainer.GetCookies(new Uri("https://www.gumtree.com.au/m-my-ads.html?c=1")))
+                            {
+                                Console.WriteLine(cookie.ToString()); // test=testValue
+                            }
                         }
                     }
                 }

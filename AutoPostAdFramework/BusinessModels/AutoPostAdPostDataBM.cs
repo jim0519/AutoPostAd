@@ -565,7 +565,7 @@ namespace AutoPostAdBusiness.BusinessModels
                     return -1;
             }).FirstOrDefault(x => x != -1));
 
-            FileInfo[] returnFileInfos = string.IsNullOrEmpty(imagesPath) ? null : imagesPath.Split(';').Select(s =>
+            FileInfo[] returnFileInfos = string.IsNullOrEmpty(imagesPath) ? null : imagesPath.GetImagesByDay().Select(s =>
             {
                 bool invalid = false;
                 FileInfo fi = new FileInfo(AutoPostAdConfig.Instance.ImageFilesPath + s);
@@ -586,6 +586,12 @@ namespace AutoPostAdBusiness.BusinessModels
                 else
                     return null;
             }).ToArray();
+
+            //if(returnFileInfos.Count()>10)
+            //{
+            //    Random rnd=new Random();
+            //    returnFileInfos=returnFileInfos.OrderBy(x => rnd.Next()).Take(10).ToArray();
+            //}
 
             return returnFileInfos;
         }

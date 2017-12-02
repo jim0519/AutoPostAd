@@ -19,8 +19,8 @@ namespace Dropship
             //ebayService.GetActiveListing();
             //ebayService.GetUnsoldList();
             //ebayService.GetDropshipzoneInfo(true);
-            //ebayService.GetDropshipzoneProductImagesPath();
             //ebayService.GetCategories();
+            //ebayService.GetDropshipzoneProductImagesPath();
             //ebayService.UpdateDropshipzoneInfoForNopcommerce();
             //ebayService.GenerateCSVFile("BA-TW-8031-FAB-GY");
             //ebayService.ConvertHtmlToPlainTextForGumtree();
@@ -29,15 +29,17 @@ namespace Dropship
             //ebayService.GetRealSmartInfo(true);
             //ebayService.GenerateNopcommerceImportCSVFile();
             //ebayService.SortingForLogoingImages();
-            //ebayService.CopyLogoedImagesToImagesFilePath();
+            ebayService.CopyLogoedImagesToImagesFilePath();
+            //ebayService.ResizeImages(@"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\TotalDirect\New\TDirect2\Material\Newfolder");
             //ebayService.UpdateActiveListing();
-            ebayService.UpdateActiveListingInventory();
+            //ebayService.UpdateActiveListingInventory();
             //ebayService.UpdateLocalDropshipzoneInfo();
             //ebayService.TestNCalc();
             //ebayService.TestGetSellerList();
             //ebayService.TestNetwork();
             //ebayService.TestInheritance();
-            //ebayService.ReDownLoadImages("BFRAME-C-BS-BK");
+            //ebayService.ReDownLoadImages("PET-GT-DH018-BK-AB");
+            //ebayService.FixDropshipzoneCategoryCustomID();
 
             //var html=System.IO.File.ReadAllText(@"F:\tt.txt");
             //var strPlainText = html.StripHTML();

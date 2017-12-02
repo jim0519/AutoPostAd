@@ -124,5 +124,30 @@ namespace Common
                 && n.Attributes.Contains("href"));
 
         }
+
+        public static IEnumerable<string> GetImagesByDay(this string imagesPath)
+        {
+            var arrImages = imagesPath.Split(';');
+            var imageCount = 10;
+            if (arrImages.Count() <= imageCount)
+            {
+                return arrImages;
+            }
+            else
+            {
+                //var day = ((int)Enum.Parse(typeof(DayOfWeek), DateTime.Now.DayOfWeek.ToString()));
+                var mods = Math.Ceiling(Convert.ToDouble(arrImages.Count()) / Convert.ToDouble(imageCount));
+                var totalDays = (DateTime.Today - DateTime.MinValue).TotalDays;
+                var multiplyDigit = totalDays % mods;
+
+                var takeImages = arrImages.Skip(Convert.ToInt32(multiplyDigit * imageCount)).Take(imageCount);
+                if (takeImages.Count() < imageCount)
+                {
+                    takeImages = takeImages.Concat(arrImages.Take(imageCount - takeImages.Count()));
+                }
+
+                return takeImages;
+            }
+        }
     }
 }

@@ -272,7 +272,11 @@ namespace AutoPostAdBusiness.Services
                 remainingAds = ((delOnlyAds == null) ? remainingAds : remainingAds.Where(d => !delOnlyAds.Contains(d)).ToList());
                 var remainingAdsCount = takeCount - ((everyTimePostAds == null) ? 0 : everyTimePostAds.Count()) - ((updatePostAds == null) ? 0 : updatePostAds.Count());
                 if (remainingAdsCount <= 0)
+                {
+                    if (updatePostAds!=null&&updatePostAds.Count>0)
+                        everyTimePostAds.InsertRange(0,updatePostAds); 
                     return everyTimePostAds;
+                }
 
                 var hasResultAds = remainingAds.Where(ad => ad.AutoPostAdResults.FirstOrDefault() != null);
                 if (hasResultAds != null && hasResultAds.Count() > 0)

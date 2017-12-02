@@ -210,20 +210,51 @@ namespace Common
             strPostData = strPostData.Trim('&');
             var buffer = Encoding.ASCII.GetBytes(strPostData);
 
-            this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-            this.Headers.Add("Accept-Encoding", "gzip, deflate");
-            this.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-            //this.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
-            this.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2");
-            this.Headers.Add("Accept-Language", "en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh-TW;q=0.2");
-            //this.Headers.Add("Connection", "keep-alive");
-            this.Headers.Add("Referer", "https://www.gumtree.com.au/t-login-form.html");
-            this.Headers.Add("Origin", "https://www.gumtree.com.au");
-            this.Headers.Add("Upgrade-Insecure-Requests", "1");
-            this.Headers.Add("Host", "www.gumtree.com.au");
-            this.Headers.Add("Cache-Control", "max-age=0");
+            CookieContainer container;
+            var request = (HttpWebRequest)WebRequest.Create("https://www.gumtree.com.au/t-login.html");
+            //request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            //request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+            //request.Headers.Add("User-Agent", this.UserAgent);
+            request.Headers.Add("Accept-Language", "en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh-TW;q=0.2");
+            //request.Headers.Add("Referer", "https://www.gumtree.com.au/t-login-form.html");
+            request.Headers.Add("Origin", "https://www.gumtree.com.au");
+            request.Headers.Add("Upgrade-Insecure-Requests", "1");
+            //request.Headers.Add("Host", "www.gumtree.com.au");
+            request.Headers.Add("Cache-Control", "max-age=0");
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+            request.UserAgent = this.UserAgent;
+            request.Referer = "https://www.gumtree.com.au/t-login-form.html";
+            request.Host = "www.gumtree.com.au";
+            
+            request.ContentLength = buffer.Length;
+            var requestStream = request.GetRequestStream();
+            requestStream.Write(buffer, 0, buffer.Length);
+            requestStream.Close();
+            container = request.CookieContainer = new CookieContainer();
 
-            this.UploadData("https://www.gumtree.com.au/t-login.html", "POST", buffer);
+            var response = request.GetResponse();
+            response.Close();
+            this.CookieContainer = container;
+
+
+            //this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            //this.Headers.Add("Accept-Encoding", "gzip, deflate");
+            //this.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+            ////this.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
+            ////this.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2");
+            //this.Headers.Add("User-Agent",this.UserAgent);
+            //this.Headers.Add("Accept-Language", "en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh-TW;q=0.2");
+            ////this.Headers.Add("Connection", "keep-alive");
+            //this.Headers.Add("Referer", "https://www.gumtree.com.au/t-login-form.html");
+            //this.Headers.Add("Origin", "https://www.gumtree.com.au");
+            //this.Headers.Add("Upgrade-Insecure-Requests", "1");
+            //this.Headers.Add("Host", "www.gumtree.com.au");
+            //this.Headers.Add("Cache-Control", "max-age=0");
+
+            //this.UploadData("https://www.gumtree.com.au/t-login.html", "POST", buffer);
         }
 
         protected override WebResponse GetWebResponse(WebRequest request)

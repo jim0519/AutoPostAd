@@ -20,7 +20,7 @@ namespace Common
         public const string UploadImage = "https://www.gumtree.com.au/p-upload-image.html";
         public const string SubmitAd = "https://www.gumtree.com.au/p-submit-ad.html";
         public const string MyAd = "https://www.gumtree.com.au/m-my-ads.html?pageNum={0}&size={1}";
-        public const string DeleteAd = "https://www.gumtree.com.au/m-delete-ad.html?adId={0}&show=ACTIVE&reason=";
+        public const string DeleteAd = "https://www.gumtree.com.au/m-delete-ad.html?adId={0}&show=ACTIVE&reason=&autoresponse=0";
         public const string Login = "https://www.gumtree.com.au/t-login.html";
         public const string LoginForm = "https://www.gumtree.com.au/t-login-form.html";
         public const string HomePage = "https://www.gumtree.com.au";

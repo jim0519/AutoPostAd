@@ -637,7 +637,7 @@ namespace AutoPostAdBusiness.Handlers
                 //lstFilters.Add(new associativeEntity() { key = "sku", value = "SCALE-BFAT-WH" });
                 paraFilters.filter = lstFilters.ToArray();
 
-                var activeProducts = _magentoService.catalogProductList(sessionID, paraFilters, string.Empty);
+                var activeProducts = _magentoService.catalogProductList(sessionID, paraFilters, string.Empty).Where(p => !string.IsNullOrEmpty(p.sku));
 
                 foreach (var product in activeProducts)
                 {
@@ -687,7 +687,7 @@ namespace AutoPostAdBusiness.Handlers
                 //lstFilters.Add(new associativeEntity() { key = "sku", value = "SCALE-BFAT-WH" });
                 paraFilters.filter = lstFilters.ToArray();
 
-                var activeProducts = _magentoService.catalogProductList(sessionID, paraFilters, string.Empty);
+                var activeProducts = _magentoService.catalogProductList(sessionID, paraFilters, string.Empty).Where(p=>!string.IsNullOrEmpty(p.sku));
                 var productsToBeUpdated = _autoPostAdPostDataService.GetCustomAutoPostAdPostData();//use [Add new product for oz crazy mall(nopcommerce)] block
 
                 foreach (var product in activeProducts)
@@ -1623,7 +1623,7 @@ namespace AutoPostAdBusiness.Handlers
                     return false;
                 }
                 var imageFiles = Directory.GetFiles(dirLogoedImages);
-                var copyToDirRoot = @"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\NopCommerce2\";
+                var copyToDirRoot = @"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\NopCommerce3\";
                 //var copyToDirRoot = AutoPostAdConfig.Instance.ImageFilesPath;
                 foreach (var imageFile in imageFiles)
                 {
@@ -1642,6 +1642,37 @@ namespace AutoPostAdBusiness.Handlers
             {
                 LogManager.Instance.Error(ex.ToString());
                 return false;
+            }
+        }
+
+        public void ResizeImages(string imagesDir)
+        {
+            try
+            {
+                if (!Directory.Exists(imagesDir))
+                {
+                    return;
+                }
+                var imageFiles = Directory.GetFiles(imagesDir);
+                //var copyToDirRoot = @"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\NopCommerce2\";
+                //var copyToDirRoot = AutoPostAdConfig.Instance.ImageFilesPath;
+                int i = 101;
+                foreach (var imageFile in imageFiles)
+                {
+                    Image img = Image.FromFile( imageFile);
+                    if (img.Width > 1000)
+                    {
+                        img = img.ResizeImage(new Size(1000, 1000));
+                    }
+                    img.Save(imagesDir+"\\"+i + ".jpg", ImageFormat.Jpeg);
+                    i++;
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                LogManager.Instance.Error(ex.ToString());
+                return;
             }
         }
 
@@ -1829,7 +1860,7 @@ namespace AutoPostAdBusiness.Handlers
                     { 
                         var updateItem = new ItemType();
                         updateItem.ItemID = data.CustomID;
-                        updateItem.Quantity = data.InventoryQty;
+                        updateItem.Quantity = 0;// data.InventoryQty;
                         //var newDesc = data.Description.Replace("dealsplash", "ozcrazymall");
                         //updateItem.Description = newDesc;
 
