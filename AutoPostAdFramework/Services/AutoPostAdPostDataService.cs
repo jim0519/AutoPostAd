@@ -308,5 +308,14 @@ namespace AutoPostAdBusiness.Services
 
             return query.ToList();
         }
+
+
+        public string[] GetRedownloadImageSKUList()
+        {
+            var sql = "select distinct C.Title as SKU from Dropship.dbo.DSZItemChanges C inner join D_Item I on C.Title=I.SKU where notice_content like '%image%' and I.StatusID=1";
+            var query = _dbContext.SqlQuery<string>(sql);
+
+            return query.ToArray();
+        }
     }
 }

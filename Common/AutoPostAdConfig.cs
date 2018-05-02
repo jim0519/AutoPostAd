@@ -214,6 +214,14 @@ namespace Common
             }
         }
 
+        public string CopyToProductionFolder
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["CopyToProductionFolder"];
+            }
+        }
+
         public string[] ActiveForms
         {
             get

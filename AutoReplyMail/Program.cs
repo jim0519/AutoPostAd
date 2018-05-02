@@ -13,33 +13,71 @@ namespace AutoReplyMail
         static void Main(string[] args)
         {
 
-            TestSmtp();
+            TestPop3("pop.mail.yahoo.com", 995, "LeiXi2003@yahoo.com.au", "MySixthLove20150501");
             
         }
 
-        public static void TestImap()
+        public static void TestImapGmail()
         {
             Imap4Client imap = new Imap4Client();
             imap.ConnectSsl("imap.gmail.com", 993);
-            imap.Login("gdutjim@gmail.com", "Wangxiaochen-0725");
+            imap.Login("gdutjim@gmail.com", "Marjoriewei-0310");
             imap.Command("capability");
 
             Mailbox inbox = imap.SelectMailbox("inbox");
-            int[] ids = inbox.Search("FROM users.gumtree.com.au");
-            Header msg_first = inbox.Fetch.HeaderObject(ids[0]);
-            FlagCollection flags = new FlagCollection();
-            flags.Add("Unseen");
-            inbox.AddFlags(ids[0], flags);
+            //int[] ids = inbox.Search("FROM users.gumtree.com.au");
+            //int[] ids = inbox.Search("users.gumtree.com.au");
+            int[] ids = inbox.Search("Unseen");
+            for (int i = ids.Count()-1; i >ids.Count()-1- 10; i--)
+            {
+                Header msgHeader = inbox.Fetch.HeaderObject(ids[i]);
+                Console.WriteLine(msgHeader.Subject);
+                FlagCollection flags = new FlagCollection();
+                flags.Add("Seen");
+                inbox.AddFlags(ids[i], flags);
+            }
+            Console.ReadLine();
+            //imap.Check
+            //FlagCollection flags = new FlagCollection();
+            //flags.Add("Unseen");
+            //inbox.AddFlags(ids[0], flags);
         }
 
-        public static void TestPop3()
+        public static void TestImapYahoo()
+        {
+            Imap4Client imap = new Imap4Client();
+            imap.ConnectSsl("imap.mail.yahoo.com", 993);
+            imap.LoginFast("LeiXi2003@yahoo.com.au", "MySixthLove20150501");
+            imap.Command("capability");
+
+            Mailbox inbox = imap.SelectMailbox("inbox");
+            //int[] ids = inbox.Search("FROM users.gumtree.com.au");
+            //int[] ids = inbox.Search("users.gumtree.com.au");
+            int[] ids = inbox.Search("Unseen");
+            for (int i = ids.Count() - 1; i > ids.Count() - 1 - 10; i--)
+            {
+                Header msgHeader = inbox.Fetch.HeaderObject(ids[i]);
+                Console.WriteLine(msgHeader.Subject);
+                FlagCollection flags = new FlagCollection();
+                flags.Add("Seen");
+                inbox.AddFlags(ids[i], flags);
+            }
+            Console.ReadLine();
+            //imap.Check
+            //FlagCollection flags = new FlagCollection();
+            //flags.Add("Unseen");
+            //inbox.AddFlags(ids[0], flags);
+        }
+
+        public static void TestPop3(string host,int port,string user,string password)
         {
             Pop3Client pop3 = new Pop3Client();
-            pop3.ConnectSsl("pop.mail.yahoo.com", 995);
-            pop3.Login("LeiXi2003@yahoo.com.au", "MySixthLove20150501");
-            //var uniqueIDs = pop3.GetUniqueIds().OrderByDescending(u => u.Index);
-            var lastGetIndex = pop3.GetMessageIndex("AAt3w0MAFUX2V86OGwA+gIYM9nw");
-            var uniqueIDs = pop3.GetUniqueIds().OrderByDescending(u => u.Index).TakeWhile(uid => uid.Index > lastGetIndex);
+            pop3.ConnectSsl(host, port);
+            pop3.Login(user, password);
+            var lastReadUniqueID = GetLastUniqueID();
+            var uniqueIDs = pop3.GetUniqueIds().OrderByDescending(u => u.Index);
+            //var lastGetIndex = pop3.GetMessageIndex("AAt3w0MAFUX2V86OGwA+gIYM9nw");
+            //var uniqueIDs = pop3.GetUniqueIds().OrderByDescending(u => u.Index).TakeWhile(uid => uid.Index > lastGetIndex);
             var listMessageBody = new List<Message>();
             foreach (var uniqueID in uniqueIDs)
             {
@@ -59,6 +97,11 @@ namespace AutoReplyMail
                 Console.Write(m.BodyText);
                 Console.Read();
             }
+        }
+
+        private static object GetLastUniqueID()
+        {
+            return new Pop3Client.PopServerUniqueId() { Index=1000,UniqueId="" };
         }
 
         public static void TestSmtp()

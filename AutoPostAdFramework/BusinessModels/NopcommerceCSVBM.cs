@@ -282,5 +282,20 @@ namespace AutoPostAdBusiness.BusinessModels
         [CsvColumn(FieldIndex = 91)]
         public string Picture8 { get; set; }
 
+        [CsvColumn(FieldIndex = 92)]
+        public string Picture9 { get; set; }
+
+        [CsvColumn(FieldIndex = 93)]
+        public string Picture10 { get; set; }
+
+        [CsvColumn(FieldIndex = 94)]
+        public string Picture11 { get; set; }
+
+        [CsvColumn(FieldIndex = 95)]
+        public string Picture12 { get; set; }
+
+        [CsvColumn(FieldIndex = 96)]
+        public string IsOverridePic { get; set; }
+
     }
 }

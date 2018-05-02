@@ -328,7 +328,13 @@ namespace Common
             {
                 WebResponse response = base.GetWebResponse(request);
                 var responseURL = response.ResponseUri.AbsoluteUri;
-                var returnAdID = Regex.Match(responseURL, @"\d{10}").Value;
+                //var returnAdID = Regex.Match(responseURL, @"\d{10}").Value;
+                var returnMatches = Regex.Matches(responseURL, @"\d{10}");
+                var returnAdID = string.Empty;
+                if (returnMatches!=null&&returnMatches.Count>0)
+                {
+                    returnAdID=returnMatches.OfType<Match>().Select(m => Convert.ToInt64(m.Value)).Max().ToString();
+                }
                 if (!string.IsNullOrEmpty(returnAdID))
                     PostAdID = returnAdID;
                 else
@@ -339,7 +345,13 @@ namespace Common
             catch (WebException webex)
             {
                 var exResponseURL = webex.Response.ResponseUri.AbsoluteUri;
-                var exreturnAdID = Regex.Match(exResponseURL, @"\d{10}").Value;
+                //var exreturnAdID = Regex.Match(exResponseURL, @"\d{10}").Value;
+                var exReturnMatches = Regex.Matches(exResponseURL, @"\d{10}");
+                var exreturnAdID = string.Empty;
+                if (exReturnMatches != null && exReturnMatches.Count > 0)
+                {
+                    exreturnAdID = exReturnMatches.OfType<Match>().Select(m => Convert.ToInt64(m.Value)).Max().ToString();
+                }
                 webex.Response.Close();//do not know if need to add this code
                 var expostAdIDKey = HttpUtility.ParseQueryString(exResponseURL).GetKey(0);
                 if (!string.IsNullOrEmpty(exreturnAdID))
@@ -1639,7 +1651,8 @@ namespace Common
             {
                 using (var wc = new WebClient())
                 {
-                    ipAddress = wc.DownloadString("http://bot.whatismyipaddress.com");
+                    //ipAddress = wc.DownloadString("http://bot.whatismyipaddress.com");
+                    ipAddress = wc.DownloadString("https://api.ipify.org/");
                 }
                 return ipAddress;
             }

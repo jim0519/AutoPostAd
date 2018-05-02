@@ -441,6 +441,7 @@ namespace AutoPostAdBusiness.BusinessModels
         public string Token { get; set; }
         public string CTK { get; set; }
         public string CSRFT { get; set; }
+        public string ThreatmetrixSessionId { get; set; }
 
         #region Address Properties
         public string AddressName

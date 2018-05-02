@@ -846,7 +846,12 @@ namespace AutoPostAdBusiness.Handlers
         }
 
 
-        public void ReDownLoadImages(string sku)
+        public string[] GetRedownloadImageSKUList()
+        {
+            return _autoPostAdPostDataService.GetRedownloadImageSKUList();
+        }
+
+        public void ReDownLoadImages(string[] skus)
         { 
             try
             {
@@ -856,66 +861,69 @@ namespace AutoPostAdBusiness.Handlers
                 {
                     skuList = _csvContext.Read<DropshipzoneSKUModel>(skuListFilePath, _csvFileDescription).ToList();
                 }
-
-                var skuLine = skuList.FirstOrDefault(l=>l.SKU.ToUpper().Equals(sku.ToUpper()));
-                //var imagesURL = skuLine.Images.Split(';');
-                var imagesURL = new List<string>();
-                if (!string.IsNullOrEmpty(skuLine.Image1))
-                    imagesURL.Add(skuLine.Image1);
-                if (!string.IsNullOrEmpty(skuLine.Image2))
-                    imagesURL.Add(skuLine.Image2);
-                if (!string.IsNullOrEmpty(skuLine.Image3))
-                    imagesURL.Add(skuLine.Image3);
-                if (!string.IsNullOrEmpty(skuLine.Image4))
-                    imagesURL.Add(skuLine.Image4);
-                if (!string.IsNullOrEmpty(skuLine.Image5))
-                    imagesURL.Add(skuLine.Image5);
-                if (!string.IsNullOrEmpty(skuLine.Image6))
-                    imagesURL.Add(skuLine.Image6);
-                if (!string.IsNullOrEmpty(skuLine.Image7))
-                    imagesURL.Add(skuLine.Image7);
-                if (!string.IsNullOrEmpty(skuLine.Image8))
-                    imagesURL.Add(skuLine.Image8);
-                if (!string.IsNullOrEmpty(skuLine.Image9))
-                    imagesURL.Add(skuLine.Image9);
-                if (!string.IsNullOrEmpty(skuLine.Image10))
-                    imagesURL.Add(skuLine.Image10);
-                if (!string.IsNullOrEmpty(skuLine.Image11))
-                    imagesURL.Add(skuLine.Image11);
-                if (!string.IsNullOrEmpty(skuLine.Image12))
-                    imagesURL.Add(skuLine.Image12);
-                if (!string.IsNullOrEmpty(skuLine.Image13))
-                    imagesURL.Add(skuLine.Image13);
-                if (!string.IsNullOrEmpty(skuLine.Image14))
-                    imagesURL.Add(skuLine.Image14);
-                if (!string.IsNullOrEmpty(skuLine.Image15))
-                    imagesURL.Add(skuLine.Image15);
-                DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + skuLine.SKU + "\\");
-                int i = 0;
-                if (!di.Exists)
+                foreach (var sku in skus)
                 {
-                    di.Create();
-                }
-                using (var wc = new WebClient())
-                {
-                    foreach (var imageURL in imagesURL)
+                    var skuLine = skuList.FirstOrDefault(l => l.SKU.ToUpper().Equals(sku.ToUpper()));
+                    if (skuLine == null)
+                        continue;
+                    //var imagesURL = skuLine.Images.Split(';');
+                    var imagesURL = new List<string>();
+                    if (!string.IsNullOrEmpty(skuLine.Image1))
+                        imagesURL.Add(skuLine.Image1);
+                    if (!string.IsNullOrEmpty(skuLine.Image2))
+                        imagesURL.Add(skuLine.Image2);
+                    if (!string.IsNullOrEmpty(skuLine.Image3))
+                        imagesURL.Add(skuLine.Image3);
+                    if (!string.IsNullOrEmpty(skuLine.Image4))
+                        imagesURL.Add(skuLine.Image4);
+                    if (!string.IsNullOrEmpty(skuLine.Image5))
+                        imagesURL.Add(skuLine.Image5);
+                    if (!string.IsNullOrEmpty(skuLine.Image6))
+                        imagesURL.Add(skuLine.Image6);
+                    if (!string.IsNullOrEmpty(skuLine.Image7))
+                        imagesURL.Add(skuLine.Image7);
+                    if (!string.IsNullOrEmpty(skuLine.Image8))
+                        imagesURL.Add(skuLine.Image8);
+                    if (!string.IsNullOrEmpty(skuLine.Image9))
+                        imagesURL.Add(skuLine.Image9);
+                    if (!string.IsNullOrEmpty(skuLine.Image10))
+                        imagesURL.Add(skuLine.Image10);
+                    if (!string.IsNullOrEmpty(skuLine.Image11))
+                        imagesURL.Add(skuLine.Image11);
+                    if (!string.IsNullOrEmpty(skuLine.Image12))
+                        imagesURL.Add(skuLine.Image12);
+                    if (!string.IsNullOrEmpty(skuLine.Image13))
+                        imagesURL.Add(skuLine.Image13);
+                    if (!string.IsNullOrEmpty(skuLine.Image14))
+                        imagesURL.Add(skuLine.Image14);
+                    if (!string.IsNullOrEmpty(skuLine.Image15))
+                        imagesURL.Add(skuLine.Image15);
+                    DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + skuLine.SKU + "\\");
+                    int i = 0;
+                    if (!di.Exists)
                     {
-                        try
+                        di.Create();
+                    }
+                    using (var wc = new WebClient())
+                    {
+                        foreach (var imageURL in imagesURL)
                         {
-                            var imageFileName = skuLine.SKU + "-" + i.ToString().PadLeft(2, '0') + ".jpg";
-                            var saveImageFileFullName = Path.Combine(di.FullName, imageFileName);
+                            try
+                            {
+                                var imageFileName = skuLine.SKU + "-" + i.ToString().PadLeft(2, '0') + ".jpg";
+                                var saveImageFileFullName = Path.Combine(di.FullName, imageFileName);
 
-                            wc.DownloadFile(imageURL, saveImageFileFullName);
-                        }
-                        catch (Exception ex)
-                        {
-                            LogManager.Instance.Error(imageURL + " download failed. " + ex.Message);
-                        }
+                                wc.DownloadFile(imageURL, saveImageFileFullName);
+                            }
+                            catch (Exception ex)
+                            {
+                                LogManager.Instance.Error(imageURL + " download failed. " + ex.Message);
+                            }
 
-                        i++;
+                            i++;
+                        }
                     }
                 }
-                
 
             }
             catch (Exception ex)
@@ -1429,11 +1437,24 @@ namespace AutoPostAdBusiness.Handlers
                                     case 8:
                                         csvRowData.Picture8 = serverPath + image;
                                         break;
+                                    case 9:
+                                        csvRowData.Picture9 = serverPath + image;
+                                        break;
+                                    case 10:
+                                        csvRowData.Picture10 = serverPath + image;
+                                        break;
+                                    case 11:
+                                        csvRowData.Picture11 = serverPath + image;
+                                        break;
+                                    case 12:
+                                        csvRowData.Picture12 = serverPath + image;
+                                        break;
                                 }
                                 i++;
 
                             }
                         }
+                        csvRowData.IsOverridePic = false.ToString().ToUpper();
 
                         csvRows.Add(csvRowData);
 
@@ -1576,7 +1597,9 @@ namespace AutoPostAdBusiness.Handlers
                     {
                         var firstImageFile = data.ImagesPath.Split(';').FirstOrDefault();
                         firstImageFile = firstImageFile.Substring(firstImageFile.IndexOf("\\" + data.SKU)+1, firstImageFile.Length - firstImageFile.IndexOf("\\" + data.SKU)-1);
-                        Image img = Image.FromFile(AutoPostAdConfig.Instance.ImageFilesPath+firstImageFile);
+                        firstImageFile = firstImageFile.Replace("_logo", "-00");
+                        Image img = Image.FromFile(AutoPostAdConfig.Instance.ImageFilesPath + firstImageFile);
+                        //Image img = Image.FromFile(AutoPostAdConfig.Instance.ImageFilesPath + data.SKU + "\\" + firstImageFile);
                         //if (img.Width==500)
                         //{
                         //    if (!Directory.Exists(Dir500))
@@ -1645,6 +1668,40 @@ namespace AutoPostAdBusiness.Handlers
             }
         }
 
+        public bool CopyLogoedImagesToProductionFolder()
+        {
+            try
+            {
+                var fromFolder = AutoPostAdConfig.Instance.ImageFilesPath;
+                var toFolder = AutoPostAdConfig.Instance.CopyToProductionFolder;
+                if (!Directory.Exists(fromFolder))
+                {
+                    return false;
+                }
+                var imageFiles = Directory.GetFiles(fromFolder);
+                //var copyToDirRoot = @"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\NopCommerce3\";
+                //var copyToDirRoot = AutoPostAdConfig.Instance.ImageFilesPath;
+                foreach (var imageFile in imageFiles)
+                {
+                    var sku = GetOnlyFileNameByFullName(imageFile).Substring(0, GetOnlyFileNameByFullName(imageFile).IndexOf("_logo"));
+                    if (Directory.Exists(toFolder + sku))
+                    {
+                        var exactDirPathName = GetExactPathName(toFolder + sku);
+                        var exactSKUName = GetOnlyFileNameByFullName(exactDirPathName);
+
+                        File.Copy(imageFile, exactDirPathName + "\\" + exactSKUName + "_logo.jpg", true);
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogManager.Instance.Error(ex.ToString());
+                return false;
+            }
+
+        }
+
         public void ResizeImages(string imagesDir)
         {
             try
@@ -1653,19 +1710,27 @@ namespace AutoPostAdBusiness.Handlers
                 {
                     return;
                 }
-                var imageFiles = Directory.GetFiles(imagesDir);
+                var imageFiles = Directory.GetFiles(imagesDir,"*",SearchOption.AllDirectories);
                 //var copyToDirRoot = @"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\NopCommerce2\";
                 //var copyToDirRoot = AutoPostAdConfig.Instance.ImageFilesPath;
-                int i = 101;
-                foreach (var imageFile in imageFiles)
+                var imageFilesGroup = from f in imageFiles
+                                      group f by new { DirName = Path.GetDirectoryName(f) } into grp
+                                      select grp;
+                
+                foreach (var imgFiles in imageFilesGroup)
                 {
-                    Image img = Image.FromFile( imageFile);
-                    if (img.Width > 1000)
+                    int i = 101;
+                    foreach(var imgFile in imgFiles)
                     {
-                        img = img.ResizeImage(new Size(1000, 1000));
+                        Image img = Image.FromFile(imgFile);
+                        if (img.Width > 1000 || img.Height > 1000)
+                        {
+                            img = img.ResizeImage(new Size(1000, 1000));
+                        }
+                        img.Save(imgFiles.Key.DirName + "\\" + i + ".jpg", ImageFormat.Jpeg);
+                        i++;
                     }
-                    img.Save(imagesDir+"\\"+i + ".jpg", ImageFormat.Jpeg);
-                    i++;
+                    
                 }
                 return;
             }

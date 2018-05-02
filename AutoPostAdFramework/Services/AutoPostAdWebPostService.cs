@@ -198,10 +198,13 @@ namespace AutoPostAdBusiness.Services
                                 //get csrft token
                                 var ctkNode = htmlDoc.DocumentNode.Descendants().Where(a => a.Attributes["name"] != null && a.Attributes["name"].Value == "ctk").FirstOrDefault();
                                 var csrftNode = htmlDoc.DocumentNode.Descendants().Where(a => a.Attributes["name"] != null && a.Attributes["name"].Value == "csrft").FirstOrDefault();
+                                var threatmetrixSessionIdNode = htmlDoc.DocumentNode.Descendants().Where(a => a.Attributes["name"] != null && a.Attributes["name"].Value == "threatmetrixSessionId").FirstOrDefault();
                                 if (ctkNode != null)
                                     ad.CTK = ctkNode.GetAttributeValue("value", string.Empty);
                                 if (csrftNode != null)
                                     ad.CSRFT = csrftNode.GetAttributeValue("value", string.Empty);
+                                if (threatmetrixSessionIdNode != null)
+                                    ad.ThreatmetrixSessionId = threatmetrixSessionIdNode.GetAttributeValue("value", string.Empty);
                                 //get verification code if exist
                                 var elementToken = htmlDoc.DocumentNode.Descendants().Where(a => a.Attributes["data-token"] != null).ToList();
                                 if (elementToken.Count > 0)
