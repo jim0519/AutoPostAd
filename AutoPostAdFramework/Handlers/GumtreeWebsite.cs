@@ -778,6 +778,8 @@ namespace AutoPostAdBusiness.Handlers
                     postString += ReturnFieldNameValueString("ctk", pd.CTK);
                 if (!string.IsNullOrEmpty(pd.CSRFT))
                     postString += ReturnFieldNameValueString("csrft", pd.CSRFT);
+                if (!string.IsNullOrEmpty(pd.ThreatmetrixSessionId))
+                    postString += ReturnFieldNameValueString("threatmetrixSessionId", pd.ThreatmetrixSessionId);
             }
             catch (Exception ex)
             {

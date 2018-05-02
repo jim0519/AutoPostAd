@@ -57,5 +57,7 @@ namespace AutoPostAdBusiness.Services
         IList<NopcommerceCategory> GetNopcommerceCategories();
 
         IList<NopcommerceCategory> GetMatchedNopcommerceCategories(string dropshizoneCategories);
+
+        string[] GetRedownloadImageSKUList();
     }
 }

@@ -29,8 +29,8 @@ namespace Dropship
             //ebayService.GetRealSmartInfo(true);
             //ebayService.GenerateNopcommerceImportCSVFile();
             //ebayService.SortingForLogoingImages();
-            ebayService.CopyLogoedImagesToImagesFilePath();
-            //ebayService.ResizeImages(@"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\TotalDirect\New\TDirect2\Material\Newfolder");
+            //ebayService.CopyLogoedImagesToImagesFilePath();
+            //ebayService.ResizeImages(@"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\SydneyBedAndSofa\WheelChair");
             //ebayService.UpdateActiveListing();
             //ebayService.UpdateActiveListingInventory();
             //ebayService.UpdateLocalDropshipzoneInfo();
@@ -38,8 +38,11 @@ namespace Dropship
             //ebayService.TestGetSellerList();
             //ebayService.TestNetwork();
             //ebayService.TestInheritance();
-            //ebayService.ReDownLoadImages("PET-GT-DH018-BK-AB");
+            var skus = ebayService.GetRedownloadImageSKUList();
+            ebayService.ReDownLoadImages(skus);
             //ebayService.FixDropshipzoneCategoryCustomID();
+            //ebayService.CopyLogoedImagesToProductionFolder();
+
 
             //var html=System.IO.File.ReadAllText(@"F:\tt.txt");
             //var strPlainText = html.StripHTML();
