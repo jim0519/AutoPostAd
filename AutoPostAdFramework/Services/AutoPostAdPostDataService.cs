@@ -8,6 +8,7 @@ using Common.Models;
 using Common;
 using System.Data.SqlClient;
 using System.Data;
+using AutoPostAdBusiness.BusinessModels;
 
 namespace AutoPostAdBusiness.Services
 {
@@ -298,6 +299,14 @@ namespace AutoPostAdBusiness.Services
                 return remainingAds;
             }
             return query;
+        }
+
+        public IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData()
+        {
+            var sql = "select * from AutoPostAdDealSplash.[dbo].[BatteryExpertGumtreeHtml]";
+            var query = _dbContext.SqlQuery<BatteryExpertGumtree>(sql);
+
+            return query.ToList();
         }
     }
 }
