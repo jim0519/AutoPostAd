@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
 using AutoPostAdData.Models;
+using AutoPostAdBusiness.BusinessModels;
 
 namespace AutoPostAdBusiness.Services
 {
@@ -35,6 +36,8 @@ namespace AutoPostAdBusiness.Services
         IList<AutoPostAdPostData> GetAutoPostAdPostDataByAdTypeID(int adTypeID,string status="");
 
         IList<AutoPostAdPostData> GetCustomAutoPostAdPostData();
+
+        IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData();
 
         IList<AutoPostAdBusiness.Handlers.DropshipController.ImagesData> GetImagesData();
 

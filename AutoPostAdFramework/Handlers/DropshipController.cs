@@ -2726,6 +2726,57 @@ namespace AutoPostAdBusiness.Handlers
 
         }
 
+        public void ConvertBatteryExpertData()
+        {
+            var origData = _autoPostAdPostDataService.GetBatteryExpertGumtreeData();
+            foreach (var data in origData)
+            {
+                var ad = new AutoPostAdPostData();
+                ad.SKU = data.MPN.Trim();
+                ad.Title = data.title;
+                ad.Price = Convert.ToDecimal( data.sale_price);
+                ad.CategoryID = 293;
+                ad.InventoryQty = 0;
+                ad.AddressID = 2;
+                ad.AccountID = 1;
+                ad.CustomFieldGroupID = 1;
+                ad.BusinessLogoPath = string.Empty;
+                ad.CustomID = data.id.ToString();
+                ad.Status = "D";
+                ad.Postage = 0;
+                ad.Notes = string.Empty;
+                ad.AdTypeID = 10;
+                ad.ScheduleRuleID = 1;
+                //TODO
+                ad.Description = data.description.StripHTML();
+
+                DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + ad.SKU + "\\");
+                if (!di.Exists)
+                {
+                    di.Create();
+                }
+                using (var wc = new WebClient())
+                {
+                    try
+                    {
+                        var imageFileName = "1.jpg";
+                        var saveImageFileFullName = Path.Combine(di.FullName, imageFileName);
+
+                        wc.DownloadFile(data.image_link, saveImageFileFullName);
+                        ad.ImagesPath = "\\" + ad.SKU + "\\" + imageFileName;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogManager.Instance.Error(data.image_link + " download failed. " + ex.Message);
+                        ad.ImagesPath = string.Empty;
+                    }
+                }
+
+                _autoPostAdPostDataService.InsertAutoPostAdPostData(ad);
+
+            }
+        }
+
         public void TestNetwork()
         {
             LogManager.Instance.Error("Test email sending");
@@ -2937,6 +2988,8 @@ namespace AutoPostAdBusiness.Handlers
 
             return nicNames;
         }
+
+        
 
         
     }
