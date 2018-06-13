@@ -1727,6 +1727,10 @@ namespace AutoPostAdBusiness.Handlers
                         {
                             img = img.ResizeImage(new Size(1000, 1000));
                         }
+                        else if (img.Width > 500 || img.Height > 500)
+                        {
+                            img = img.ResizeImage(new Size(500, 500));
+                        }
                         img.Save(imgFiles.Key.DirName + "\\" + i + ".jpg", ImageFormat.Jpeg);
                         i++;
                     }
