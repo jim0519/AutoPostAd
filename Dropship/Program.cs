@@ -27,7 +27,7 @@ namespace Dropship
             //ebayService.FixQuickSaleImagePath();
             //ebayService.RenderNewAddItemDescription();
             //ebayService.GetRealSmartInfo(true);
-            //ebayService.GenerateNopcommerceImportCSVFile();
+            ebayService.GenerateNopcommerceImportCSVFile();
             //ebayService.SortingForLogoingImages();
             //ebayService.CopyLogoedImagesToImagesFilePath();
             //ebayService.ResizeImages(@"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\TotalDirect\New\TDirect2\Material\Newfolder");
