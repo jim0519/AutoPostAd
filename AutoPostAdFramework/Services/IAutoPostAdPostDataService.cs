@@ -37,7 +37,7 @@ namespace AutoPostAdBusiness.Services
 
         IList<AutoPostAdPostData> GetCustomAutoPostAdPostData();
 
-        //IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData();
+        IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData();
 
         IList<AutoPostAdBusiness.Handlers.DropshipController.ImagesData> GetImagesData();
 

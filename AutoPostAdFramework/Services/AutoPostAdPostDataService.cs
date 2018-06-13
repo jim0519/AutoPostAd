@@ -301,13 +301,13 @@ namespace AutoPostAdBusiness.Services
             return query;
         }
 
-        //public IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData()
-        //{
-        //    var sql = "select * from AutoPostAdDealSplash.[dbo].[BatteryExpertGumtreeHtml]";
-        //    var query = _dbContext.SqlQuery<BatteryExpertGumtree>(sql);
+        public IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData()
+        {
+            var sql = "select * from AutoPostAdDealSplash.[dbo].[BatteryExpertGumtreeHtml]";
+            var query = _dbContext.SqlQuery<BatteryExpertGumtree>(sql);
 
-        //    return query.ToList();
-        //}
+            return query.ToList();
+        }
 
 
         public string[] GetRedownloadImageSKUList()
