@@ -28,9 +28,9 @@ namespace Dropship
             //ebayService.RenderNewAddItemDescription();
             //ebayService.GetRealSmartInfo(true);
             //ebayService.GenerateNopcommerceImportCSVFile();
-            ebayService.SortingForLogoingImages();
+            //ebayService.SortingForLogoingImages();
             //ebayService.CopyLogoedImagesToImagesFilePath();
-            //ebayService.ResizeImages(@"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\SydneyBedAndSofa\WheelChair");
+            //ebayService.ResizeImages(@"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\TotalDirect\New\TDirect2\Material\Newfolder");
             //ebayService.UpdateActiveListing();
             //ebayService.UpdateActiveListingInventory();
             //ebayService.UpdateLocalDropshipzoneInfo();
