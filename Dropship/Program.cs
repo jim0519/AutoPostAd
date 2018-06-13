@@ -28,7 +28,7 @@ namespace Dropship
             //ebayService.RenderNewAddItemDescription();
             //ebayService.GetRealSmartInfo(true);
             //ebayService.GenerateNopcommerceImportCSVFile();
-            //ebayService.SortingForLogoingImages();
+            ebayService.SortingForLogoingImages();
             //ebayService.CopyLogoedImagesToImagesFilePath();
             //ebayService.ResizeImages(@"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\SydneyBedAndSofa\WheelChair");
             //ebayService.UpdateActiveListing();
@@ -38,8 +38,8 @@ namespace Dropship
             //ebayService.TestGetSellerList();
             //ebayService.TestNetwork();
             //ebayService.TestInheritance();
-            var skus = ebayService.GetRedownloadImageSKUList();
-            ebayService.ReDownLoadImages(skus);
+            //var skus = ebayService.GetRedownloadImageSKUList();
+            //ebayService.ReDownLoadImages(skus);
             //ebayService.FixDropshipzoneCategoryCustomID();
             //ebayService.CopyLogoedImagesToProductionFolder();
 

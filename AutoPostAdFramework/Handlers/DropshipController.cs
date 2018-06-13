@@ -855,8 +855,9 @@ namespace AutoPostAdBusiness.Handlers
         { 
             try
             {
-                var skuListFilePath = @"G:\Jim\Own\LearningDoc\TempProject\AutoPostAd\QuickSale\DownloadProductFromDropshipZone\sku_list.csv";
+                var skuListFilePath = @"C:\Temp\sku_list.csv";
                 var skuList = new List<DropshipzoneSKUModel>();
+                int i = 1;
                 if (File.Exists(skuListFilePath))
                 {
                     skuList = _csvContext.Read<DropshipzoneSKUModel>(skuListFilePath, _csvFileDescription).ToList();
@@ -899,7 +900,7 @@ namespace AutoPostAdBusiness.Handlers
                     if (!string.IsNullOrEmpty(skuLine.Image15))
                         imagesURL.Add(skuLine.Image15);
                     DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + skuLine.SKU + "\\");
-                    int i = 0;
+
                     if (!di.Exists)
                     {
                         di.Create();
@@ -1310,6 +1311,7 @@ namespace AutoPostAdBusiness.Handlers
 
         public bool GenerateNopcommerceImportCSVFile()
         {
+            var reDownloadImageSKUs = new List<string>();
             try
             {
                 var adDatas = _autoPostAdPostDataService.GetCustomAutoPostAdPostData();
@@ -1320,7 +1322,8 @@ namespace AutoPostAdBusiness.Handlers
                 var itemsPerFile = 100;
                 var fileNumber = 1;
                 var totalFileNumber = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(adDatas.Count) / Convert.ToDecimal(itemsPerFile)));
-                var serverPath = @"C:\HostingSpaces\ozcrazym\www.ozcrazymall.com.au\www\Content\UploadProductImages\";
+                //var serverPath = @"C:\HostingSpaces\ozcrazym\www.ozcrazymall.com.au\www\Content\UploadProductImages\";
+                var serverPath = AutoPostAdConfig.Instance.ImageFilesPath;
 
                 foreach (var adData in adDatas)
                 {
@@ -1403,58 +1406,59 @@ namespace AutoPostAdBusiness.Handlers
                             var categoryIDs = nopCategories.Where(c => adData.BusinessLogoPath.Split(',').Contains(c.Description));
                             csvRowData.CategoryIds = categoryIDs.Select(c => c.Id.ToString()).Aggregate((current, next) => current + ";" + next);
                         }
-                        if (!string.IsNullOrEmpty(adData.ImagesPath))
+                        var imageFiles = Directory.GetFiles(AutoPostAdConfig.Instance.ImageFilesPath + adData.SKU, "*", SearchOption.AllDirectories);
+                        if (imageFiles!=null&& imageFiles.Count()>0)
                         {
-                            DirectoryCopy(AutoPostAdConfig.Instance.ImageFilesPath + adData.SKU, Directory.GetCurrentDirectory() + "\\NopcommerceItemFile\\" + adData.SKU, false);
-
+                            //DirectoryCopy(AutoPostAdConfig.Instance.ImageFilesPath + adData.SKU, Directory.GetCurrentDirectory() + "\\NopcommerceItemFile\\" + adData.SKU, false);
 
                             int i = 1;
-                            foreach (var image in adData.ImagesPath.Split(';'))
+                            foreach (var image in imageFiles)
                             {
+                                var imageName = image.Substring(image.IndexOf(adData.SKU), image.Length - image.IndexOf(adData.SKU));
                                 switch (i)
                                 {
                                     case 1:
-                                        csvRowData.Picture1 = serverPath + image;
+                                        csvRowData.Picture1 = serverPath + imageName;
                                         break;
                                     case 2:
-                                        csvRowData.Picture2 = serverPath + image;
+                                        csvRowData.Picture2 = serverPath + imageName;
                                         break;
                                     case 3:
-                                        csvRowData.Picture3 = serverPath + image;
+                                        csvRowData.Picture3 = serverPath + imageName;
                                         break;
                                     case 4:
-                                        csvRowData.Picture4 = serverPath + image;
+                                        csvRowData.Picture4 = serverPath + imageName;
                                         break;
                                     case 5:
-                                        csvRowData.Picture5 = serverPath + image;
+                                        csvRowData.Picture5 = serverPath + imageName;
                                         break;
                                     case 6:
-                                        csvRowData.Picture6 = serverPath + image;
+                                        csvRowData.Picture6 = serverPath + imageName;
                                         break;
                                     case 7:
-                                        csvRowData.Picture7 = serverPath + image;
+                                        csvRowData.Picture7 = serverPath + imageName;
                                         break;
                                     case 8:
-                                        csvRowData.Picture8 = serverPath + image;
+                                        csvRowData.Picture8 = serverPath + imageName;
                                         break;
                                     case 9:
-                                        csvRowData.Picture9 = serverPath + image;
+                                        csvRowData.Picture9 = serverPath + imageName;
                                         break;
                                     case 10:
-                                        csvRowData.Picture10 = serverPath + image;
+                                        csvRowData.Picture10 = serverPath + imageName;
                                         break;
                                     case 11:
-                                        csvRowData.Picture11 = serverPath + image;
+                                        csvRowData.Picture11 = serverPath + imageName;
                                         break;
                                     case 12:
-                                        csvRowData.Picture12 = serverPath + image;
+                                        csvRowData.Picture12 = serverPath + imageName;
                                         break;
                                 }
                                 i++;
 
                             }
                         }
-                        csvRowData.IsOverridePic = false.ToString().ToUpper();
+                        csvRowData.IsOverridePic = true.ToString().ToUpper();
 
                         csvRows.Add(csvRowData);
 
@@ -1470,11 +1474,15 @@ namespace AutoPostAdBusiness.Handlers
                     }
                     catch (Exception ex)
                     {
+                        reDownloadImageSKUs.Add(adData.SKU);
                         LogManager.Instance.Error(ex.ToString());
                     }
                 }
 
-
+                if(reDownloadImageSKUs.Count>0)
+                {
+                    //ReDownLoadImages(reDownloadImageSKUs.ToArray());
+                }
                 
                 
 
@@ -1678,10 +1686,25 @@ namespace AutoPostAdBusiness.Handlers
                 {
                     return false;
                 }
-                var imageFiles = Directory.GetFiles(fromFolder);
+
+
+
+                var fromImageFiles = Directory.GetFiles(fromFolder);
+                var toDirectories = Directory.GetDirectories(toFolder);
+
+                //foreach(var to in toDirectories)
+                //{
+                //    var tostring = to.Substring(to.LastIndexOf("\\"), to.Length - to.LastIndexOf("\\"));
+                //}
+
+                var fromSKU = fromImageFiles.Select(f => GetOnlyFileNameByFullName(f).Substring(0, GetOnlyFileNameByFullName(f).IndexOf("_logo")).ToUpper());
+                var toSKU = toDirectories.Select(d => d.Substring(d.LastIndexOf("\\")+1,d.Length-d.LastIndexOf("\\")-1).ToUpper());
+                var fromHasToHasnot = fromSKU.Where(f => !toSKU.Contains(f));
+                var toHasFromHasnot = toSKU.Where(t => !fromSKU.Contains(t));
+                //var fromImageFiles = Directory.GetFiles(fromFolder);
                 //var copyToDirRoot = @"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\NopCommerce3\";
                 //var copyToDirRoot = AutoPostAdConfig.Instance.ImageFilesPath;
-                foreach (var imageFile in imageFiles)
+                foreach (var imageFile in fromImageFiles)
                 {
                     var sku = GetOnlyFileNameByFullName(imageFile).Substring(0, GetOnlyFileNameByFullName(imageFile).IndexOf("_logo"));
                     if (Directory.Exists(toFolder + sku))
@@ -1691,6 +1714,10 @@ namespace AutoPostAdBusiness.Handlers
 
                         File.Copy(imageFile, exactDirPathName + "\\" + exactSKUName + "_logo.jpg", true);
                     }
+                }
+                foreach(var notexistSKU in toHasFromHasnot)
+                {
+                    LogManager.Instance.Info(notexistSKU);
                 }
                 return true;
             }
@@ -2726,56 +2753,56 @@ namespace AutoPostAdBusiness.Handlers
 
         }
 
-        public void ConvertBatteryExpertData()
-        {
-            var origData = _autoPostAdPostDataService.GetBatteryExpertGumtreeData();
-            foreach (var data in origData)
-            {
-                var ad = new AutoPostAdPostData();
-                ad.SKU = data.MPN.Trim();
-                ad.Title = data.title;
-                ad.Price = Convert.ToDecimal( data.sale_price);
-                ad.CategoryID = 293;
-                ad.InventoryQty = 0;
-                ad.AddressID = 2;
-                ad.AccountID = 1;
-                ad.CustomFieldGroupID = 1;
-                ad.BusinessLogoPath = string.Empty;
-                ad.CustomID = data.id.ToString();
-                ad.Status = "D";
-                ad.Postage = 0;
-                ad.Notes = string.Empty;
-                ad.AdTypeID = 10;
-                ad.ScheduleRuleID = 1;
-                //TODO
-                ad.Description = data.description.StripHTML();
+        //public void ConvertBatteryExpertData()
+        //{
+        //    var origData = _autoPostAdPostDataService.GetBatteryExpertGumtreeData();
+        //    foreach (var data in origData)
+        //    {
+        //        var ad = new AutoPostAdPostData();
+        //        ad.SKU = data.MPN.Trim();
+        //        ad.Title = data.title;
+        //        ad.Price = Convert.ToDecimal( data.sale_price);
+        //        ad.CategoryID = 293;
+        //        ad.InventoryQty = 0;
+        //        ad.AddressID = 2;
+        //        ad.AccountID = 1;
+        //        ad.CustomFieldGroupID = 1;
+        //        ad.BusinessLogoPath = string.Empty;
+        //        ad.CustomID = data.id.ToString();
+        //        ad.Status = "D";
+        //        ad.Postage = 0;
+        //        ad.Notes = string.Empty;
+        //        ad.AdTypeID = 10;
+        //        ad.ScheduleRuleID = 1;
+        //        //TODO
+        //        ad.Description = data.description.StripHTML();
 
-                DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + ad.SKU + "\\");
-                if (!di.Exists)
-                {
-                    di.Create();
-                }
-                using (var wc = new WebClient())
-                {
-                    try
-                    {
-                        var imageFileName = "1.jpg";
-                        var saveImageFileFullName = Path.Combine(di.FullName, imageFileName);
+        //        DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + ad.SKU + "\\");
+        //        if (!di.Exists)
+        //        {
+        //            di.Create();
+        //        }
+        //        using (var wc = new WebClient())
+        //        {
+        //            try
+        //            {
+        //                var imageFileName = "1.jpg";
+        //                var saveImageFileFullName = Path.Combine(di.FullName, imageFileName);
 
-                        wc.DownloadFile(data.image_link, saveImageFileFullName);
-                        ad.ImagesPath = "\\" + ad.SKU + "\\" + imageFileName;
-                    }
-                    catch (Exception ex)
-                    {
-                        LogManager.Instance.Error(data.image_link + " download failed. " + ex.Message);
-                        ad.ImagesPath = string.Empty;
-                    }
-                }
+        //                wc.DownloadFile(data.image_link, saveImageFileFullName);
+        //                ad.ImagesPath = "\\" + ad.SKU + "\\" + imageFileName;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                LogManager.Instance.Error(data.image_link + " download failed. " + ex.Message);
+        //                ad.ImagesPath = string.Empty;
+        //            }
+        //        }
 
-                _autoPostAdPostDataService.InsertAutoPostAdPostData(ad);
+        //        _autoPostAdPostDataService.InsertAutoPostAdPostData(ad);
 
-            }
-        }
+        //    }
+        //}
 
         public void TestNetwork()
         {

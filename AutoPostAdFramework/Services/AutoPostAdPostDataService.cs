@@ -246,7 +246,7 @@ namespace AutoPostAdBusiness.Services
 
         public IList<NopcommerceCategory> GetNopcommerceCategories()
         {
-            var categories = _dbContext.SqlQuery<NopcommerceCategory>("select * from ozcrazym_Nopcommerce.dbo.Category");
+            var categories = _dbContext.SqlQuery<NopcommerceCategory>("select * from NopCommerce390.dbo.Category");
             return categories.ToList();
         }
 
@@ -301,18 +301,18 @@ namespace AutoPostAdBusiness.Services
             return query;
         }
 
-        public IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData()
-        {
-            var sql = "select * from AutoPostAdDealSplash.[dbo].[BatteryExpertGumtreeHtml]";
-            var query = _dbContext.SqlQuery<BatteryExpertGumtree>(sql);
+        //public IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData()
+        //{
+        //    var sql = "select * from AutoPostAdDealSplash.[dbo].[BatteryExpertGumtreeHtml]";
+        //    var query = _dbContext.SqlQuery<BatteryExpertGumtree>(sql);
 
-            return query.ToList();
-        }
+        //    return query.ToList();
+        //}
 
 
         public string[] GetRedownloadImageSKUList()
         {
-            var sql = "select distinct C.Title as SKU from Dropship.dbo.DSZItemChanges C inner join D_Item I on C.Title=I.SKU where notice_content like '%image%' and I.StatusID=1";
+            var sql = "select distinct C.Title as SKU from Dropship.dbo.DSZItemChanges C inner join Dropship.dbo.D_Item I on C.Title=I.SKU where notice_content like '%image%' and I.StatusID=1";
             var query = _dbContext.SqlQuery<string>(sql);
 
             return query.ToArray();
