@@ -1410,7 +1410,7 @@ namespace AutoPostAdBusiness.Handlers
                         var imageFiles = Directory.GetFiles(AutoPostAdConfig.Instance.ImageFilesPath + adData.SKU, "*", SearchOption.AllDirectories);
                         if (imageFiles!=null&& imageFiles.Count()>0)
                         {
-                            //DirectoryCopy(AutoPostAdConfig.Instance.ImageFilesPath + adData.SKU, Directory.GetCurrentDirectory() + "\\NopcommerceItemFile\\" + adData.SKU, false);
+                            DirectoryCopy(AutoPostAdConfig.Instance.ImageFilesPath + adData.SKU, Directory.GetCurrentDirectory() + "\\NopcommerceItemFile\\" + adData.SKU, false);
 
                             int i = 1;
                             foreach (var image in imageFiles)
