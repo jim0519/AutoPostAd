@@ -21,6 +21,7 @@ using System.Drawing.Imaging;
 using System.Management;
 using System.Threading;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 
 namespace AutoPostAdBusiness.Handlers
 {
@@ -1322,8 +1323,8 @@ namespace AutoPostAdBusiness.Handlers
                 var itemsPerFile = 100;
                 var fileNumber = 1;
                 var totalFileNumber = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(adDatas.Count) / Convert.ToDecimal(itemsPerFile)));
-                //var serverPath = @"C:\HostingSpaces\ozcrazym\www.ozcrazymall.com.au\www\Content\UploadProductImages\";
-                var serverPath = AutoPostAdConfig.Instance.ImageFilesPath;
+                var serverPath = @"C:\HostingSpaces\ozcrazym\www.ozcrazymall.com.au\www\Content\UploadProductImages\";
+                //var serverPath = AutoPostAdConfig.Instance.ImageFilesPath;
 
                 foreach (var adData in adDatas)
                 {
@@ -1654,7 +1655,7 @@ namespace AutoPostAdBusiness.Handlers
                     return false;
                 }
                 var imageFiles = Directory.GetFiles(dirLogoedImages);
-                var copyToDirRoot = @"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\NopCommerce3\";
+                var copyToDirRoot = @"C:\Users\gdutj\Documents\Work\GumtreePostAdData\NopCommerce3\";
                 //var copyToDirRoot = AutoPostAdConfig.Instance.ImageFilesPath;
                 foreach (var imageFile in imageFiles)
                 {
@@ -1729,6 +1730,34 @@ namespace AutoPostAdBusiness.Handlers
 
         }
 
+        public void RenameImages()
+        {
+            //var allImageFiles = Directory.GetFiles(@"C:\Users\gdutj\Documents\DropshipImages\Temp", "*", SearchOption.AllDirectories);
+            //foreach(var image in allImageFiles)
+            //{
+            //    im
+            //}
+
+            var allDir = Directory.GetDirectories(@"C:\Users\gdutj\Documents\DropshipImages\Temp");
+            foreach(var dir in allDir)
+            {
+                var imageFiles = Directory.GetFiles(dir);
+                var dirInfo = new DirectoryInfo(dir);
+                var SKU = dirInfo.Name;
+                Console.WriteLine(SKU);
+                
+                int i = 0;
+                foreach (var image in imageFiles)
+                {
+                    var imgInfo = new FileInfo(image);
+                    File.Move(imgInfo.FullName, Path.Combine(dir, SKU + "-" + i.ToString().PadLeft(2, '0') + ".jpg"));
+                    i++;
+                }
+                Console.WriteLine();
+            }
+            Console.ReadLine();
+        }
+
         public void ResizeImages(string imagesDir)
         {
             try
@@ -1743,26 +1772,63 @@ namespace AutoPostAdBusiness.Handlers
                 var imageFilesGroup = from f in imageFiles
                                       group f by new { DirName = Path.GetDirectoryName(f) } into grp
                                       select grp;
-                
+
                 foreach (var imgFiles in imageFilesGroup)
                 {
+                    var di = new DirectoryInfo(imgFiles.Key.DirName);
                     int i = 101;
-                    foreach(var imgFile in imgFiles)
+                    foreach (var imgFile in imgFiles)
                     {
                         Image img = Image.FromFile(imgFile);
                         if (img.Width > 1000 || img.Height > 1000)
                         {
                             img = img.ResizeImage(new Size(1000, 1000));
                         }
-                        else if (img.Width > 500 || img.Height > 500)
+                        else
                         {
-                            img = img.ResizeImage(new Size(500, 500));
+                            img = img.ResizeImage(new Size(img.Width, img.Height));
                         }
-                        img.Save(imgFiles.Key.DirName + "\\" + i + ".jpg", ImageFormat.Jpeg);
+                        img.Save(di.FullName + "\\" + i + ".jpg", ImageFormat.Jpeg);
                         i++;
                     }
-                    
+
                 }
+
+                //Resize Dropship Images
+                //var tmpDir = Directory.CreateDirectory(imagesDir+"\\Temp");
+                //foreach (var imgFiles in imageFilesGroup)
+                //{
+                //    var di = new DirectoryInfo(imgFiles.Key.DirName);
+                //    var newDir = Directory.CreateDirectory(tmpDir.FullName+"\\"+di.Name);
+                //    //int i = 0;
+                //    foreach (var imgFile in imgFiles)
+                //    {
+                //        var fi = new FileInfo(imgFile);
+                //        if (fi.Name.IndexOf("logo") == -1)
+                //        {
+                //            var imgNum = Regex.Matches(fi.Name, @"\d{2}").OfType<Match>().LastOrDefault().Value;
+                //            if (!string.IsNullOrEmpty(imgNum))
+                //            {
+                //                Image img = Image.FromFile(imgFile);
+                //                if (img.Width > 1000 || img.Height > 1000)
+                //                {
+                //                    img = img.ResizeImage(new Size(1000, 1000));
+                //                }
+                //                else
+                //                {
+                //                    img = img.ResizeImage(new Size(img.Width, img.Height));
+                //                }
+                //                //fi.Delete();
+                //                img.Save(newDir.FullName + "\\" + di.Name + "-" + imgNum.ToString().PadLeft(2, '0') + ".jpg", ImageFormat.Jpeg);
+                //            }
+                //        }
+                //        else
+                //        {
+                //            fi.CopyTo(newDir.FullName + "\\" + fi.Name);
+                //        }
+                //    }
+
+                //}
                 return;
             }
             catch (Exception ex)
@@ -2753,56 +2819,56 @@ namespace AutoPostAdBusiness.Handlers
 
         }
 
-        //public void ConvertBatteryExpertData()
-        //{
-        //    var origData = _autoPostAdPostDataService.GetBatteryExpertGumtreeData();
-        //    foreach (var data in origData)
-        //    {
-        //        var ad = new AutoPostAdPostData();
-        //        ad.SKU = data.MPN.Trim();
-        //        ad.Title = data.title;
-        //        ad.Price = Convert.ToDecimal( data.sale_price);
-        //        ad.CategoryID = 293;
-        //        ad.InventoryQty = 0;
-        //        ad.AddressID = 2;
-        //        ad.AccountID = 1;
-        //        ad.CustomFieldGroupID = 1;
-        //        ad.BusinessLogoPath = string.Empty;
-        //        ad.CustomID = data.id.ToString();
-        //        ad.Status = "D";
-        //        ad.Postage = 0;
-        //        ad.Notes = string.Empty;
-        //        ad.AdTypeID = 10;
-        //        ad.ScheduleRuleID = 1;
-        //        //TODO
-        //        ad.Description = data.description.StripHTML();
+        public void ConvertBatteryExpertData()
+        {
+            var origData = _autoPostAdPostDataService.GetBatteryExpertGumtreeData();
+            foreach (var data in origData)
+            {
+                var ad = new AutoPostAdPostData();
+                ad.SKU = data.MPN.Trim();
+                ad.Title =(data.title.Length>65? data.title.Substring(0,65):data.title);
+                ad.Price = Convert.ToDecimal(data.sale_price);
+                ad.CategoryID = 293;
+                ad.InventoryQty = 0;
+                ad.AddressID = 2;
+                ad.AccountID = 1;
+                ad.CustomFieldGroupID = 1;
+                ad.BusinessLogoPath = string.Empty;
+                ad.CustomID = data.id.ToString();
+                ad.Status = "D";
+                ad.Postage = 0;
+                ad.Notes = string.Empty;
+                ad.AdTypeID = 12;
+                ad.ScheduleRuleID = 1;
+                //TODO
+                ad.Description = data.description.StripHTML();
 
-        //        DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + ad.SKU + "\\");
-        //        if (!di.Exists)
-        //        {
-        //            di.Create();
-        //        }
-        //        using (var wc = new WebClient())
-        //        {
-        //            try
-        //            {
-        //                var imageFileName = "1.jpg";
-        //                var saveImageFileFullName = Path.Combine(di.FullName, imageFileName);
+                DirectoryInfo di = new DirectoryInfo(AutoPostAdConfig.Instance.ImageFilesPath + ad.SKU + "\\");
+                if (!di.Exists)
+                {
+                    di.Create();
+                }
+                using (var wc = new WebClient())
+                {
+                    try
+                    {
+                        var imageFileName = "1.jpg";
+                        var saveImageFileFullName = Path.Combine(di.FullName, imageFileName);
 
-        //                wc.DownloadFile(data.image_link, saveImageFileFullName);
-        //                ad.ImagesPath = "\\" + ad.SKU + "\\" + imageFileName;
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                LogManager.Instance.Error(data.image_link + " download failed. " + ex.Message);
-        //                ad.ImagesPath = string.Empty;
-        //            }
-        //        }
+                        wc.DownloadFile(data.image_link, saveImageFileFullName);
+                        ad.ImagesPath = "\\" + ad.SKU + "\\" + imageFileName;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogManager.Instance.Error(data.image_link + " download failed. " + ex.Message);
+                        ad.ImagesPath = string.Empty;
+                    }
+                }
 
-        //        _autoPostAdPostDataService.InsertAutoPostAdPostData(ad);
+                _autoPostAdPostDataService.InsertAutoPostAdPostData(ad);
 
-        //    }
-        //}
+            }
+        }
 
         public void TestNetwork()
         {

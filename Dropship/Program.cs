@@ -27,10 +27,10 @@ namespace Dropship
             //ebayService.FixQuickSaleImagePath();
             //ebayService.RenderNewAddItemDescription();
             //ebayService.GetRealSmartInfo(true);
-            ebayService.GenerateNopcommerceImportCSVFile();
+            //ebayService.GenerateNopcommerceImportCSVFile();
             //ebayService.SortingForLogoingImages();
             //ebayService.CopyLogoedImagesToImagesFilePath();
-            //ebayService.ResizeImages(@"G:\Jim\Own\LearningDoc\DailyDealsAggregator\Informations\GumtreePostAdData\TotalDirect\New\TDirect2\Material\Newfolder");
+            ebayService.ResizeImages(@"C:\Users\gdutj\Documents\Tencent Files\33713853\FileRecv\MobileFile\CarAccident");
             //ebayService.UpdateActiveListing();
             //ebayService.UpdateActiveListingInventory();
             //ebayService.UpdateLocalDropshipzoneInfo();
@@ -39,9 +39,12 @@ namespace Dropship
             //ebayService.TestNetwork();
             //ebayService.TestInheritance();
             //var skus = ebayService.GetRedownloadImageSKUList();
+            //var skus = new string[] { "FPIT-UFO-7676" };
             //ebayService.ReDownLoadImages(skus);
             //ebayService.FixDropshipzoneCategoryCustomID();
             //ebayService.CopyLogoedImagesToProductionFolder();
+            //ebayService.ConvertBatteryExpertData();
+            //ebayService.RenameImages();
 
 
             //var html=System.IO.File.ReadAllText(@"F:\tt.txt");

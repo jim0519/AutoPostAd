@@ -246,7 +246,7 @@ namespace AutoPostAdBusiness.Services
 
         public IList<NopcommerceCategory> GetNopcommerceCategories()
         {
-            var categories = _dbContext.SqlQuery<NopcommerceCategory>("select * from NopCommerce390.dbo.Category");
+            var categories = _dbContext.SqlQuery<NopcommerceCategory>("select * from ozcrazym_Nopcommerce.dbo.Category");
             return categories.ToList();
         }
 
@@ -303,7 +303,7 @@ namespace AutoPostAdBusiness.Services
 
         public IList<BatteryExpertGumtree> GetBatteryExpertGumtreeData()
         {
-            var sql = "select * from AutoPostAdDealSplash.[dbo].[BatteryExpertGumtreeHtml]";
+            var sql = "select * from AutoPostAdDealSplash.[dbo].[GT2]";
             var query = _dbContext.SqlQuery<BatteryExpertGumtree>(sql);
 
             return query.ToList();
