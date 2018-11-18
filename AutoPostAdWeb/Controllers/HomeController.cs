@@ -72,11 +72,11 @@ namespace AutoPostAdWeb.Controllers
         [HttpPost]
         public ActionResult DeletePostAd(FormCollection formData)
         {
-            var postService = AutoPostAdContext.Instance.Resolve<IAutoPostAdWebPostService>();
-            if (postService.DeleteExistingAd())
-            {
-                postService.PostActiveAdOnWeb();
-            }
+            //var postService = AutoPostAdContext.Instance.Resolve<IAutoPostAdWebPostService>();
+            //if (postService.DeleteExistingAd())
+            //{
+            //    postService.PostActiveAdOnWeb();
+            //}
 
             return View();
         }
@@ -93,18 +93,18 @@ namespace AutoPostAdWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult GumtreeAuthentic(FormCollection formData)
         {
-            var username = formData["userName"];
-            var password = formData["password"];
-            var postService = AutoPostAdContext.Instance.Resolve<IAutoPostAdWebPostService>();
-            if (postService.FetchAndSaveGumtreeCookie(username, password))
-            {
-                //ViewBag.Message = "Your application description page.";
-                TempData.Add("Result", "Cookie fetched and saved successfully.");
-            }
-            else
-            {
-                TempData.Add("Result", "Cookie fetched and saved failed.");
-            }
+            //var username = formData["userName"];
+            //var password = formData["password"];
+            //var postService = AutoPostAdContext.Instance.Resolve<IAutoPostAdWebPostService>();
+            //if (postService.FetchAndSaveGumtreeCookie(username, password))
+            //{
+            //    //ViewBag.Message = "Your application description page.";
+            //    TempData.Add("Result", "Cookie fetched and saved successfully.");
+            //}
+            //else
+            //{
+            //    TempData.Add("Result", "Cookie fetched and saved failed.");
+            //}
 
 
             return View();

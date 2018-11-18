@@ -18,6 +18,7 @@ namespace AutoPostAdBusiness
 
         public void Register(ContainerBuilder builder, ITypeFinder typeFinder)
         {
+            var assemblies = typeFinder.GetAssemblies().ToArray();
             //PerLifetimeScope
             builder.RegisterType<AutoPostAdHeaderService>().As<IAutoPostAdHeaderService>().InstancePerLifetimeScope();
             builder.RegisterType<AutoPostAdPostDataService>().As<IAutoPostAdPostDataService>().InstancePerLifetimeScope();
@@ -38,6 +39,8 @@ namespace AutoPostAdBusiness
             builder.RegisterType<AutoPostAdWebPostService>().As<IAutoPostAdWebPostService>().InstancePerLifetimeScope();
 
             builder.RegisterType<ScheduleTaskService>().As<IScheduleTaskService>().InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(assemblies).Where(t => typeof(IBumpupable).IsAssignableFrom(t)).InstancePerLifetimeScope().AsImplementedInterfaces();
         }
 
         public int Order

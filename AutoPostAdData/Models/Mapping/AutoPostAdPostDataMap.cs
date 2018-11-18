@@ -87,7 +87,8 @@ namespace AutoPostAdData.Models.Mapping
                 .WillCascadeOnDelete(false);
 
             this.HasMany(t => t.AutoPostAdResults).WithRequired().HasForeignKey(d => d.AutoPostAdDataID).WillCascadeOnDelete(true);
-            
+
+
         }
     }
 }

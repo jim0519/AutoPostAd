@@ -38,8 +38,8 @@
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.3.1.1\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="eBay.Service">
       <HintPath>..\packages\eBay.3.897.0\lib\net40\eBay.Service.dll</HintPath>
@@ -52,6 +52,9 @@
     </Reference>
     <Reference Include="NCalc">
       <HintPath>..\packages\ncalc.1.3.8\lib\NCalc.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -91,6 +94,8 @@
     <Compile Include="Infrastructure\CacheManager.cs" />
     <Compile Include="Infrastructure\ContainerManager.cs" />
     <Compile Include="Infrastructure\StartupTask.cs" />
+    <Compile Include="Models\AdvertiseChannel.cs" />
+    <Compile Include="Models\AccountAdvertise.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AutoPostAdHeader.cs" />
@@ -134,9 +139,7 @@
     </Compile>
     <Compile Include="ProgressInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\XML\XMLSample\GetCategoryResponse.xml" />

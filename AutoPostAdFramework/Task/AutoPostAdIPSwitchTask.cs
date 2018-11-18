@@ -12,18 +12,21 @@ using System.Web;
 using Common;
 using AutoPostAdBusiness.MapperInfrastruture;
 using AutoPostAdBusiness.BusinessModels;
+using AutoPostAdBusiness.Handlers;
 
 namespace AutoPostAdBusiness.Task
 {
     public partial class AutoPostAdIPSwitchTask : AutoPostAdTask
     {
+        private readonly IEnumerable<IBumpupable> _bumpupHandlers;
 
         public AutoPostAdIPSwitchTask(IAutoPostAdWebPostService autoPostAdWebPostService,
             IAutoPostAdPostDataService autoPostAdPostDataService,
-            IRepository<ScheduleRule> scheduleRule)
+            IRepository<ScheduleRule> scheduleRule,
+            IEnumerable<IBumpupable> bumpupHandlers)
             : base(autoPostAdWebPostService, autoPostAdPostDataService, scheduleRule)
         {
-            
+            _bumpupHandlers = bumpupHandlers;
         }
 
         /// <summary>
@@ -33,6 +36,17 @@ namespace AutoPostAdBusiness.Task
         {
             try
             {
+
+                //var datas = new AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM>(AutoPostAdPostDataService.GetAllAutoPostAdPostData().ToList());
+                
+                //foreach(var handler in _bumpupHandlers)
+                //{
+                //    var handlerChannelName = handler.GetType().Name;
+                //    var bumpupAds = datas.Where(ad=>ad.AccountObj.ChannelObj.Name.ToLower().Equals(handlerChannelName.ToLower())).ToList();
+                //    handler.Bumpup(bumpupAds);
+                //}
+                //return;
+
                 //LogManager.Instance.Error("Test email error");
                 var scheduleRule = ScheduleRule.Table.Where(r => r.Status == Status.Active).ToList();
                 var nowTime = DateTime.Now;
@@ -48,6 +62,16 @@ namespace AutoPostAdBusiness.Task
                         {
                             var scheduleAds = new AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM>(AutoPostAdPostDataService.GetAutoPostAdPostDataByScheduleRuleID(rule.ID));
 
+                            #region bumpup ads with corresponding channel
+                            foreach (var handler in _bumpupHandlers)
+                            {
+                                var handlerChannelName = handler.GetType().Name;
+                                var bumpupAds = scheduleAds.Where(ad => ad.AccountObj.ChannelObj.Name.ToLower().Equals(handlerChannelName.ToLower())).ToList();
+                                handler.Bumpup(bumpupAds);
+                            }
+                            #endregion
+
+
                             #region Change IP Implementation
                             var currentPublicIP = "";
                             try
@@ -62,7 +86,8 @@ namespace AutoPostAdBusiness.Task
                                 LogManager.Instance.Error(ex.Message);
                                 return;
                             }
-                            var postAdDataIPGrp = scheduleAds.GroupBy(pd => new{ IPAddress=pd.AccountObj.IPAddress,Netmask=pd.AccountObj.Netmask,Gateway=pd.AccountObj.Gateway}).OrderBy(pdg => pdg.Key.IPAddress.Equals(currentPublicIP)).ThenBy(pdg => pdg.Key.IPAddress);
+                            var gumtreeAds = scheduleAds.Where(ad => ad.AccountObj.ChannelID == 1);
+                            var postAdDataIPGrp = gumtreeAds.GroupBy(pd => new{ IPAddress=pd.AccountObj.IPAddress,Netmask=pd.AccountObj.Netmask,Gateway=pd.AccountObj.Gateway}).OrderBy(pdg => pdg.Key.IPAddress.Equals(currentPublicIP)).ThenBy(pdg => pdg.Key.IPAddress);
                             //var deletePostSuccess = true;
                             foreach (var pdg in postAdDataIPGrp)
                             {

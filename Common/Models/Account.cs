@@ -24,5 +24,9 @@ namespace Common.Models
         public string Netmask { get; set; }
         public string Gateway { get; set; }
         public string UserAgent { get; set; }
+        public byte[] RefBinary { get; set; }
+        public int ChannelID { get; set; }
+
+        public virtual AdvertiseChannel ChannelObj { get; set; }
     }
 }

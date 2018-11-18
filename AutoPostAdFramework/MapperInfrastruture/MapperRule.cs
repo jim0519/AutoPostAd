@@ -17,22 +17,26 @@ namespace AutoPostAdBusiness.MapperInfrastruture
     {
         public void Execute()
         {
-            //AutoPostAdPostData,AutoPostAdPostDataBM
-            AutoMapper.Mapper.CreateMap<AutoPostAdPostData, AutoPostAdPostDataBM>().ForMember(dest => dest.Result, mce => mce.Ignore())
+            Mapper.Initialize(cfg => {
+
+                //AutoPostAdPostData,AutoPostAdPostDataBM
+                cfg.CreateMap<AutoPostAdPostData, AutoPostAdPostDataBM>().ForMember(dest => dest.Result, mce => mce.Ignore())
                 .ForMember(dest => dest.ResultMessage, mce => mce.Ignore())
                 .ForMember(dest => dest.Selected, mce => mce.Ignore());
 
-            Mapper.CreateMap<AutoPostAdPostDataBM, AutoPostAdPostData>().ForMember(dest => dest.ID , mce => mce.Ignore());
+                cfg.CreateMap<AutoPostAdPostDataBM, AutoPostAdPostData>().ForMember(dest => dest.ID , mce => mce.Ignore());
 
-            //
-            AutoMapper.Mapper.CreateMap<AutoPostAdPostData, QuickSalePostAdPostDataBM>().ForMember(dest => dest.Result, mce => mce.Ignore())
+                //
+                cfg.CreateMap<AutoPostAdPostData, QuickSalePostAdPostDataBM>().ForMember(dest => dest.Result, mce => mce.Ignore())
                 .ForMember(dest => dest.ResultMessage, mce => mce.Ignore())
                 .ForMember(dest => dest.Selected, mce => mce.Ignore());
-            Mapper.CreateMap<QuickSalePostAdPostDataBM, AutoPostAdPostData>().ForMember(dest => dest.ID, mce => mce.Ignore());
+                cfg.CreateMap<QuickSalePostAdPostDataBM, AutoPostAdPostData>().ForMember(dest => dest.ID, mce => mce.Ignore());
 
-            Mapper.CreateMap<catalogCategoryTree, catalogCategoryEntity>().ForMember(dest=>dest.is_active,mce=>mce.UseValue<int>(1));
+                cfg.CreateMap<catalogCategoryTree, catalogCategoryEntity>().ForMember(dest=>dest.is_active,mce=>mce.UseValue<int>(1));
 
-            //Mapper.CreateMap<catalogCategoryTree, catalogCategoryEntity>().AfterMap((o, d) => d.is_active = (d.is_active.Equals(0) ? 1 : d.is_active));
+                //Mapper.CreateMap<catalogCategoryTree, catalogCategoryEntity>().AfterMap((o, d) => d.is_active = (d.is_active.Equals(0) ? 1 : d.is_active));
+
+            });
         }
 
 

@@ -29,6 +29,8 @@ namespace AutoPostAdBusiness.Services
         bool DeleteAd(IEnumerable<AutoPostAdPostDataBM> postAdDatas);
     }
 
+    
+
 
     public class AutoPostAdWebPostService : GumtreeWebsite,IAutoPostAdWebPostService
     {

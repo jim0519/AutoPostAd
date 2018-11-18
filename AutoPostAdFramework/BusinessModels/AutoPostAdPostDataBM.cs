@@ -374,6 +374,12 @@ namespace AutoPostAdBusiness.BusinessModels
             get { return _originalData.AutoPostAdResults; }
             set { _originalData.AutoPostAdResults = value; }
         }
+
+        public ICollection<AccountAdvertise> AccountAdvertises
+        {
+            get { return _originalData.AccountAdvertises; }
+            set { _originalData.AccountAdvertises = value; }
+        }
         #endregion
 
         public bool Selected { get; set; }

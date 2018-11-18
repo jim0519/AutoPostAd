@@ -61,7 +61,10 @@ namespace AutoPostAdData.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(500);
 
-            //this.HasRequired(r => r.AutoPostAdPostDataObj).WithMany(d => d.AutoPostAdResults).HasForeignKey(d=>d.SKU).WillCascadeOnDelete(true);
+            this.Property(t => t.RefBinary).IsMaxLength();
+
+            //Relationship
+            this.HasRequired(a => a.ChannelObj).WithMany().HasForeignKey(d => d.ChannelID);
         }
     }
 }

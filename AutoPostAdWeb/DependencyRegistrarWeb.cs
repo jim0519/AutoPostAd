@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Autofac;
+//using Autofac;
 using AutoPostAdBusiness.Handlers;
 using AutoPostAdBusiness.Services;
 using Common;
 using Common.DeathByCaptcha;
 
-namespace AutoPostAdBusiness
+namespace AutoPostAdWeb
 {
-    public class DependencyRegistrarBusiness : IDependencyRegistrar
-    {
-        #region IDependencyRegistrar Members
+    //public class DependencyRegistrarBusiness : IDependencyRegistrar
+    //{
+    //    #region IDependencyRegistrar Members
 
-        public void Register(ContainerBuilder builder, ITypeFinder typeFinder)
-        {
-            //PerLifetimeScope
+    //    public void Register(ContainerBuilder builder, ITypeFinder typeFinder)
+    //    {
+    //        //PerLifetimeScope
             
-        }
+    //    }
 
-        public int Order
-        {
-            get { return 0; }
-        }
+    //    public int Order
+    //    {
+    //        get { return 0; }
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 }

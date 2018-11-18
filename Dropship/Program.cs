@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AutoPostAdBusiness.Handlers;
 using Common.Infrastructure;
 using Common;
-
+using AutoPostAdBusiness.Task;
 
 namespace Dropship
 {
@@ -15,6 +15,32 @@ namespace Dropship
         static void Main(string[] args)
         {
             AutoPostAdContext.Instance.Initialize();
+            //RuneBayServiceMethod();
+            CallScheduleTask();
+        }
+
+        private static void CallScheduleTask()
+        {
+            var scope = AutoPostAdContext.Instance.ContainerManager.Scope();
+            ITask task = null;
+            
+            var type2 = System.Type.GetType("AutoPostAdBusiness.Task.AutoPostAdIPSwitchTask, AutoPostAdBusiness");
+            if (type2 != null)
+            {
+                object instance;
+                if (!AutoPostAdContext.Instance.TryResolve(type2, scope, out instance))
+                {
+                    //not resolved
+                    instance = AutoPostAdContext.Instance.ResolveUnregistered(type2, scope);
+                }
+                task = instance as ITask;
+            }
+
+            task.Execute();
+        }
+
+        private static void RuneBayServiceMethod()
+        {
             var ebayService = AutoPostAdContext.Instance.Resolve<DropshipController>();
             //ebayService.GetActiveListing();
             //ebayService.GetUnsoldList();
@@ -30,7 +56,7 @@ namespace Dropship
             //ebayService.GenerateNopcommerceImportCSVFile();
             //ebayService.SortingForLogoingImages();
             //ebayService.CopyLogoedImagesToImagesFilePath();
-            ebayService.ResizeImages(@"C:\Users\gdutj\Documents\Tencent Files\33713853\FileRecv\MobileFile\CarAccident");
+            ebayService.ResizeImages(@"C:\Users\gdutj\Documents\Work\GumtreePostAdData\SydneyFurniture2\Temp");
             //ebayService.UpdateActiveListing();
             //ebayService.UpdateActiveListingInventory();
             //ebayService.UpdateLocalDropshipzoneInfo();

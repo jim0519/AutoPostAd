@@ -39,6 +39,8 @@ namespace AutoPostAdData.Models
             modelBuilder.Configurations.Add(new ScheduleTaskMap());
             modelBuilder.Configurations.Add(new ScheduleRuleMap());
             modelBuilder.Configurations.Add(new ScheduleRuleLineMap());
+            modelBuilder.Configurations.Add(new AccountAdvertiseMap()); 
+            modelBuilder.Configurations.Add(new AdvertiseChannelMap());
             base.OnModelCreating(modelBuilder);
         }
 

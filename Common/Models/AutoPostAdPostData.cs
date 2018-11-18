@@ -36,6 +36,7 @@ namespace Common.Models
         public virtual Account AccountObj { get; set; }
         public virtual ScheduleRule ScheduleRuleObj { get; set; }
         public virtual ICollection<AutoPostAdResult> AutoPostAdResults { get; set; }
+        public virtual ICollection<AccountAdvertise> AccountAdvertises { get; set; }
 
         //[CustomValidation(typeof(AutoPostAdPostData), "ValidateImages")]
         //public ICollection<ImageDetail> Images { get; set; }
@@ -43,7 +44,7 @@ namespace Common.Models
         //public class ImageDetail:BaseEntity
         //{
         //    public string FilePath { get; set; }
-            
+
         //    [CustomValidation(typeof(ImageDetail),"ValidateImageSize")]
         //    public int Size { get; set; }
 
@@ -66,7 +67,7 @@ namespace Common.Models
         //}
 
 
-        
+
 
     }
 }
