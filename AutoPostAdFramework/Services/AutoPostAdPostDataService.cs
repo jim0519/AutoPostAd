@@ -9,6 +9,7 @@ using Common;
 using System.Data.SqlClient;
 using System.Data;
 using AutoPostAdBusiness.BusinessModels;
+using System.Text.RegularExpressions;
 
 namespace AutoPostAdBusiness.Services
 {
@@ -260,11 +261,22 @@ namespace AutoPostAdBusiness.Services
 
         public IList<AutoPostAdPostData> GetAutoPostAdPostDataByScheduleRuleID(int scheduleRuleID)
         {
+            
             var takeCount=5;
-            var query = _autoPostAdPostDataRepository.Table.Where(d => d.ScheduleRuleID == scheduleRuleID && d.Status == Status.Active).ToList();
             var scheduleRule = _scheduleRuleRepository.Table.FirstOrDefault(s => s.ID.Equals(scheduleRuleID));
+            //if (AutoPostAdConfig.Instance.OneTimePostAdNum!=null&& scheduleRule.Name.Contains("OneTimePostAdNum"))
+            //{
+            //    takeCount = Convert.ToInt32( AutoPostAdConfig.Instance.OneTimePostAdNum);
+            //}
+            var query = _autoPostAdPostDataRepository.Table.Where(d => d.ScheduleRuleID == scheduleRuleID && d.Status == Status.Active).ToList();
+            
             if (scheduleRule.Name.Contains("RollOver"))
             {
+                if(scheduleRule.Name.IndexOf('=') != -1)
+                {
+                    takeCount = Convert.ToInt32(Regex.Match(scheduleRule.Name.Split('=')[1], @"\d+").Value);
+                }
+
                 var everyTimePostAds = query.Where(d => d.Notes.ToUpper().Equals("ALWAYS")).ToList();
                 var updatePostAds = query.Where(d => d.Notes.ToUpper().Equals("UPDATE")).ToList();
                 var delOnlyAds = query.Where(d => d.Notes.ToUpper().Equals("DELONLY")).ToList();
@@ -274,9 +286,28 @@ namespace AutoPostAdBusiness.Services
                 var remainingAdsCount = takeCount - ((everyTimePostAds == null) ? 0 : everyTimePostAds.Count()) - ((updatePostAds == null) ? 0 : updatePostAds.Count());
                 if (remainingAdsCount <= 0)
                 {
-                    if (updatePostAds!=null&&updatePostAds.Count>0)
-                        everyTimePostAds.InsertRange(0,updatePostAds); 
-                    return everyTimePostAds;
+                    if(everyTimePostAds!=null&& everyTimePostAds.Count>0)
+                    {
+                        if (updatePostAds != null && updatePostAds.Count > 0)
+                            everyTimePostAds.InsertRange(0, updatePostAds);
+                        if(delOnlyAds != null && delOnlyAds.Count > 0)
+                            everyTimePostAds.InsertRange(0, delOnlyAds);
+                        return everyTimePostAds;
+                    }
+                    else
+                    {
+                        if (updatePostAds != null && updatePostAds.Count > 0)
+                        {
+                            if (delOnlyAds != null && delOnlyAds.Count > 0)
+                                updatePostAds.InsertRange(0, delOnlyAds);
+                            return updatePostAds;
+                        }
+                            
+                        //    everyTimePostAds.InsertRange(0, updatePostAds);
+                        //return everyTimePostAds;
+                    }
+
+                    
                 }
 
                 var hasResultAds = remainingAds.Where(ad => ad.AutoPostAdResults.FirstOrDefault() != null);
