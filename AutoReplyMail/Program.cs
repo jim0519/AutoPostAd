@@ -12,9 +12,10 @@ namespace AutoReplyMail
     {
         static void Main(string[] args)
         {
-
+            //TestPop3("pop.mail.yahoo.com", 995, "JustNotLuck17@yahoo.com", "Gosou-1810");
             TestPop3("pop.mail.yahoo.com", 995, "LeiXi2003@yahoo.com.au", "MySixthLove20150501");
-            
+            //TestImapYahoo();
+            //TestImapGmail();
         }
 
         public static void TestImapGmail()
@@ -69,33 +70,41 @@ namespace AutoReplyMail
             //inbox.AddFlags(ids[0], flags);
         }
 
-        public static void TestPop3(string host,int port,string user,string password)
+        public static void TestPop3(string host, int port, string user, string password)
         {
-            Pop3Client pop3 = new Pop3Client();
-            pop3.ConnectSsl(host, port);
-            pop3.Login(user, password);
-            var lastReadUniqueID = GetLastUniqueID();
-            var uniqueIDs = pop3.GetUniqueIds().OrderByDescending(u => u.Index);
-            //var lastGetIndex = pop3.GetMessageIndex("AAt3w0MAFUX2V86OGwA+gIYM9nw");
-            //var uniqueIDs = pop3.GetUniqueIds().OrderByDescending(u => u.Index).TakeWhile(uid => uid.Index > lastGetIndex);
-            var listMessageBody = new List<Message>();
-            foreach (var uniqueID in uniqueIDs)
+            try
             {
-                var index = uniqueID.Index;
-                var id = uniqueID.UniqueId;
-                listMessageBody.Add(pop3.RetrieveMessageObject(index));
-                //var body = message.BodyHtml.Text;
-                //Console.Write(body);
-                //Console.Read();
+                Pop3Client pop3 = new Pop3Client();
+                //pop3.Connect(host, port);
+                pop3.ConnectSsl(host, port);
+                pop3.Login(user, password);
+                var lastReadUniqueID = GetLastUniqueID();
+                //var uniqueIDs = pop3.GetUniqueIds().OrderByDescending(u => u.Index);
+                //var lastGetIndex = pop3.GetMessageIndex("AAt3w0MAFUX2V86OGwA+gIYM9nw");
+                var uniqueIDs = pop3.GetUniqueIds().OrderByDescending(u => u.Index).TakeWhile(uid => uid.Index > 11200);
+                var listMessageBody = new List<Message>();
+                foreach (var uniqueID in uniqueIDs)
+                {
+                    var index = uniqueID.Index;
+                    var id = uniqueID.UniqueId;
+                    listMessageBody.Add(pop3.RetrieveMessageObject(index));
+                    //var body = message.BodyHtml.Text;
+                    //Console.Write(body);
+                    //Console.Read();
+                }
+
+                var selectedMessages = listMessageBody.Where(m => m.From.Email.Contains("users.gumtree.com.au"));
+
+                //var uniqueIDsOrdered=uniqueIDs.OrderByDescending(u => u.Index);
+                foreach (var m in selectedMessages)
+                {
+                    Console.Write(m.BodyText.TextStripped);
+                    Console.Read();
+                }
             }
-
-            var selectedMessages = listMessageBody.Where(m => m.From.Email.Contains("users.gumtree.com.au"));
-
-            //var uniqueIDsOrdered=uniqueIDs.OrderByDescending(u => u.Index);
-            foreach (var m in selectedMessages)
+            catch (Exception ex)
             {
-                Console.Write(m.BodyText);
-                Console.Read();
+
             }
         }
 

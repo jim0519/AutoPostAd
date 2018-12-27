@@ -38,35 +38,44 @@ namespace AutoPostAdBusiness.Handlers
         {
             try
             {
+                if (postAdDatas == null || postAdDatas.Count() == 0)
+                    return;
+
                 var currentChannelName = this.GetType().Name;
                 var client = new RestClient("http://www.yeeyi.com/");
                 //var accountAdvertise = postAdDatas.FirstOrDefault().AccountAdvertises.FirstOrDefault(aa=>aa.AccountObj.ChannelObj.Name.ToLower().Equals(currentChannelName.ToLower()));
-                var accountObj = postAdDatas.FirstOrDefault().AccountObj;
-                var ruleObj = postAdDatas.FirstOrDefault().ScheduleRuleObj;
-                var accountAttr = new YeeyiAccountAttribute();
-                var advertiseAttr = new YeeyiAdvertiseAttribute();
-                var readAccAttr = CommonFunction.ConvertBinaryToObject<YeeyiAccountAttribute>(accountObj.RefBinary);
-                if (readAccAttr != null)
-                    accountAttr = readAccAttr;
-                
-                
 
-                if (accountAttr.LoginCookie == null)
-                {
-                    var cookieJar = Login(accountObj.UserName, accountObj.Password);
-                    if (cookieJar != null)
-                        accountAttr.LoginCookie = cookieJar;
-                }
 
-                var elaspDay=  (DateTime.Now.Date- ruleObj.LastSuccessTime.Date).TotalDays;
-                if (accountAttr.LoginCookie != null && (accountAttr.BumpUpTimesLeft > 0||string.IsNullOrEmpty(accountAttr.LastReturnMessage)|| elaspDay>0))
+                foreach (var ad in postAdDatas)
                 {
-                    client.CookieContainer = accountAttr.LoginCookie;
-                    foreach (var ad in postAdDatas)
+                    try
                     {
-                        try
+                        var accountAdvertise = ad.AccountAdvertises.FirstOrDefault(aa => aa.AccountObj.ChannelObj.Name.ToLower().Equals(currentChannelName.ToLower()));
+                        var accountObj = accountAdvertise.AccountObj;
+                        var ruleObj = ad.ScheduleRuleObj;
+                        var accountAttr = new YeeyiAccountAttribute();
+                        var advertiseAttr = new YeeyiAdvertiseAttribute();
+                        var readAccAttr = CommonFunction.ConvertBinaryToObject<YeeyiAccountAttribute>(accountObj.RefBinary);
+                        if (readAccAttr != null)
+                            accountAttr = readAccAttr;
+
+
+
+                        if (accountAttr.LoginCookie == null)
                         {
-                            var accountAdvertise=ad.AccountAdvertises.FirstOrDefault(aa => aa.AccountObj.ChannelObj.Name.ToLower().Equals(currentChannelName.ToLower()));
+                            var cookieJar = Login(accountObj.UserName, accountObj.Password);
+                            if (cookieJar != null)
+                                accountAttr.LoginCookie = cookieJar;
+                        }
+
+                        var elaspDay = (DateTime.Now.Date - ruleObj.LastSuccessTime.Date).TotalDays;
+                        if (accountAttr.LoginCookie != null && (accountAttr.BumpUpTimesLeft > 0 || string.IsNullOrEmpty(accountAttr.LastReturnMessage) || elaspDay > 0))
+                        {
+                            client.CookieContainer = accountAttr.LoginCookie;
+
+                            
+                            if (accountAdvertise == null)
+                                continue;
                             var readAdAttr = JsonConvert.DeserializeObject<YeeyiAdvertiseAttribute>(accountAdvertise.Ref);
                             if (readAdAttr != null)
                                 advertiseAttr = readAdAttr;
@@ -99,26 +108,30 @@ namespace AutoPostAdBusiness.Handlers
                                     accAdObj.OnlineAdvertiseDate = DateTime.Now;
                                     accAdObj.Ref = JsonConvert.SerializeObject(advertiseAttr);
                                     _accountAdvertiseRepository.Update(accAdObj);
+                                    LogManager.Instance.Info($"Bump up ad {accAdObj.AdvertiseID} in Account {accAdObj.AccountID} successfully.");
                                 }
                             }
 
-                            if (accountAttr.BumpUpTimesLeft > 0)
-                                continue;
-                            else
-                                break;
-
-
+                            //if (accountAttr.BumpUpTimesLeft > 0)
+                            //    continue;
+                            //else
+                            //    break;
                         }
-                        catch (Exception ex)
-                        {
-                            LogManager.Instance.Error(ex.Message);
-                        }
+
+                        accountAttr.LastPostTime = DateTime.Now;
+
+                        accountObj.RefBinary = CommonFunction.ConvertObjectToBinary(accountAttr);
+                        _accountRepository.Update(accountObj);
                     }
-                    accountAttr.LastPostTime = DateTime.Now;
+                    catch (Exception ex)
+                    {
+                        LogManager.Instance.Error(ex.Message);
+                    }
                 }
+                    
+                
 
-                accountObj.RefBinary = CommonFunction.ConvertObjectToBinary(accountAttr);
-                _accountRepository.Update(accountObj);
+                
             }
             catch(Exception ex)
             {

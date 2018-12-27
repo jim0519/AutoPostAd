@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\Users\gdutj\Downloads\PublishedApp\AutoPostAdSite</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Users\gdutj\Downloads\PublishedApp\AutoPostAdSiteAdHubNewDesign</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
@@ -28,34 +28,37 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/18/2018 13:00:14</publishTime>
     </File>
     <File Include="bin/AutoPostAdBusiness.dll">
-      <publishTime>11/18/2018 08:31:18</publishTime>
+      <publishTime>11/24/2018 10:47:18</publishTime>
     </File>
     <File Include="bin/AutoPostAdBusiness.dll.config">
-      <publishTime>11/14/2018 13:28:57</publishTime>
+      <publishTime>11/20/2018 09:20:55</publishTime>
     </File>
     <File Include="bin/AutoPostAdBusiness.pdb">
-      <publishTime>11/18/2018 08:31:18</publishTime>
+      <publishTime>11/24/2018 10:47:18</publishTime>
     </File>
     <File Include="bin/AutoPostAdBusiness.XmlSerializers.dll">
-      <publishTime>11/18/2018 08:31:23</publishTime>
+      <publishTime>11/24/2018 10:47:23</publishTime>
     </File>
     <File Include="bin/AutoPostAdData.dll">
-      <publishTime>11/17/2018 18:38:28</publishTime>
+      <publishTime>11/20/2018 09:15:53</publishTime>
     </File>
     <File Include="bin/AutoPostAdData.pdb">
-      <publishTime>11/17/2018 18:38:28</publishTime>
+      <publishTime>11/20/2018 09:15:53</publishTime>
     </File>
     <File Include="bin/AutoPostAdWeb.dll">
-      <publishTime>11/18/2018 08:31:23</publishTime>
+      <publishTime>11/24/2018 10:47:24</publishTime>
     </File>
     <File Include="bin/AutoPostAdWeb.pdb">
-      <publishTime>11/18/2018 08:31:23</publishTime>
+      <publishTime>11/24/2018 10:47:24</publishTime>
+    </File>
+    <File Include="bin/chromedriver.exe">
+      <publishTime>11/20/2018 09:22:03</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>11/17/2018 18:38:28</publishTime>
+      <publishTime>11/20/2018 09:15:53</publishTime>
     </File>
     <File Include="bin/Common.pdb">
-      <publishTime>11/17/2018 18:38:28</publishTime>
+      <publishTime>11/20/2018 09:15:53</publishTime>
     </File>
     <File Include="bin/eBay.Service.dll">
       <publishTime>11/18/2014 12:08:22</publishTime>
@@ -153,6 +156,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/WebGrease.dll">
       <publishTime>07/17/2013 17:03:52</publishTime>
     </File>
+    <File Include="chromedriver.exe">
+      <publishTime>11/20/2018 09:22:03</publishTime>
+    </File>
     <File Include="Content/bootstrap.css">
       <publishTime>12/02/2017 15:35:37</publishTime>
     </File>
@@ -181,7 +187,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/02/2017 15:35:37</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>11/17/2018 18:06:05</publishTime>
+      <publishTime>11/20/2018 08:35:55</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>12/02/2017 15:35:37</publishTime>
@@ -304,7 +310,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/02/2017 15:35:37</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/17/2018 18:38:37</publishTime>
+      <publishTime>11/20/2018 09:22:40</publishTime>
     </File>
   </ItemGroup>
 </Project>

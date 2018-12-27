@@ -261,7 +261,7 @@ namespace AutoPostAdBusiness.Services
 
         public IList<AutoPostAdPostData> GetAutoPostAdPostDataByScheduleRuleID(int scheduleRuleID)
         {
-            
+            //cannot handle ads in same rule but in different accounts when it comes to roll over rules
             var takeCount=5;
             var scheduleRule = _scheduleRuleRepository.Table.FirstOrDefault(s => s.ID.Equals(scheduleRuleID));
             //if (AutoPostAdConfig.Instance.OneTimePostAdNum!=null&& scheduleRule.Name.Contains("OneTimePostAdNum"))

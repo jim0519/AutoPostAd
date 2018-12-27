@@ -453,7 +453,7 @@ namespace AutoPostAdBusiness.Handlers
         {
             try
             {
-                if (!postAdDatas.FirstOrDefault().AccountObj.LastName.Contains("FixAdID"))
+                if (postAdDatas==null || postAdDatas.Count()==0||!postAdDatas.FirstOrDefault().AccountObj.LastName.Contains("FixAdID"))
                     return;
                 //LogManager.Instance.Info("FixAdID Passed");
                 //foreach(var ad in postAdDatas)

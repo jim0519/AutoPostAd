@@ -77,10 +77,16 @@ CREATE TABLE [dbo].[AdvertiseChannel](
 ) ON [PRIMARY]
 GO
 
+insert into AdvertiseChannel values ('Gumtree','Gumtree');
+Go
+
+insert into AdvertiseChannel values ('Yeeyi','Yeeyi');
+Go
+
 IF NOT EXISTS (SELECT * FROM SysObjects O INNER JOIN SysColumns C ON O.ID=C.ID WHERE
  ObjectProperty(O.ID,'IsUserTable')=1 AND O.Name='Account' AND C.Name='ChannelID')
 	ALTER TABLE dbo.Account ADD
-		ChannelID int not NULL CONSTRAINT DF_Account_ChannelID DEFAULT 0
+		ChannelID int not NULL CONSTRAINT DF_Account_ChannelID DEFAULT 1
 GO
 
 
@@ -295,6 +301,6 @@ select B.*, A.LastSuccessTime from
 select top 1 RL.TimeRangeFrom,RL.TimeRangeTo,R.IntervalDay,R.LastSuccessTime
 from ScheduleRuleLine RL 
 inner join ScheduleRule R on RL.ScheduleRuleID=R.ID
-where ScheduleRuleID=3
+where ScheduleRuleID=7
 ) A
 cross apply dbo.fn_SplitDayRangeEqualParts(A.TimeRangeFrom,A.TimeRangeTo,A.IntervalDay) B

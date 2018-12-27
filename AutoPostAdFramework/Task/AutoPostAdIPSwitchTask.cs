@@ -62,16 +62,6 @@ namespace AutoPostAdBusiness.Task
                         {
                             var scheduleAds = new AutoPostAdDataSource<AutoPostAdPostData, AutoPostAdPostDataBM>(AutoPostAdPostDataService.GetAutoPostAdPostDataByScheduleRuleID(rule.ID));
 
-                            #region bumpup ads with corresponding channel
-                            foreach (var handler in _bumpupHandlers)
-                            {
-                                var handlerChannelName = handler.GetType().Name;
-                                var bumpupAds = scheduleAds.Where(ad => ad.AccountObj.ChannelObj.Name.ToLower().Equals(handlerChannelName.ToLower())).ToList();
-                                handler.Bumpup(bumpupAds);
-                            }
-                            #endregion
-
-
                             #region Change IP Implementation
                             var currentPublicIP = "";
                             try
@@ -86,8 +76,8 @@ namespace AutoPostAdBusiness.Task
                                 LogManager.Instance.Error(ex.Message);
                                 return;
                             }
-                            var gumtreeAds = scheduleAds.Where(ad => ad.AccountObj.ChannelID == 1);
-                            var postAdDataIPGrp = gumtreeAds.GroupBy(pd => new{ IPAddress=pd.AccountObj.IPAddress,Netmask=pd.AccountObj.Netmask,Gateway=pd.AccountObj.Gateway}).OrderBy(pdg => pdg.Key.IPAddress.Equals(currentPublicIP)).ThenBy(pdg => pdg.Key.IPAddress);
+                            //var gumtreeAds = scheduleAds.Where(ad => ad.AccountObj.ChannelID == 1);
+                            var postAdDataIPGrp = scheduleAds.GroupBy(pd => new{ IPAddress=pd.AccountObj.IPAddress,Netmask=pd.AccountObj.Netmask,Gateway=pd.AccountObj.Gateway}).OrderBy(pdg => pdg.Key.IPAddress.Equals(currentPublicIP)).ThenBy(pdg => pdg.Key.IPAddress);
                             //var deletePostSuccess = true;
                             foreach (var pdg in postAdDataIPGrp)
                             {
@@ -108,7 +98,16 @@ namespace AutoPostAdBusiness.Task
 
                                 LogManager.Instance.Info("Posting ads using IP "+currentPublicIP);
 
-                                var grpScheduleAdsDelete = pdg.Select(pd => pd);
+                                #region bumpup ads with corresponding channel
+                                foreach (var handler in _bumpupHandlers)
+                                {
+                                    var handlerChannelName = handler.GetType().Name;
+                                    var bumpupAds = pdg.Where(ad =>ad.AccountAdvertises!=null&&ad.AccountAdvertises.Any(aa=>aa.AccountObj.ChannelObj.Name.ToLower().Equals(handlerChannelName.ToLower()))).ToList();
+                                    handler.Bumpup(bumpupAds);
+                                }
+                                #endregion
+
+                                var grpScheduleAdsDelete = pdg.Where(ad => ad.AccountObj.ChannelID == 1);// pdg.Select(pd => pd);
                                 var grpScheduleAdsPost = grpScheduleAdsDelete.Where(pd=>!pd.Notes.ToUpper().Equals("DELONLY"));
                                 var grpScheduleAdsToBeUpdateDelete = grpScheduleAdsDelete.Where(pd => pd.Notes.ToUpper().Equals("DELONLY"));
                                 var grpScheduleAdsToBeClearNotes = grpScheduleAdsDelete.Where(pd => pd.Notes.ToUpper().Equals("UPDATE"));
